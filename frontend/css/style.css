@@ -1,0 +1,30 @@
+/* ===== Fuentes ===== */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Work+Sans:wght@400;500;600&display=swap');
+
+/* ===== Variables de color ===== */
+:root {
+    --color-verde: #2D4A3E;
+    --color-beige: #F5F1E8;
+    --color-texto: #1A1A1A;
+    --color-coral: #E8846B;
+    --color-blanco: #FFFFFF;
+}
+
+/* ===== Reset básico ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Work Sans', sans-serif;
+    color: var(--color-texto);
+    background-color: var(--color-beige);
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    font-family: 'Fraunces', serif;
+    line-height: 1.2;
+}
