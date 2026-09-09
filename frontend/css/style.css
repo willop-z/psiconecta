@@ -1,16 +1,11 @@
-/* ===== Fuentes ===== */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Work+Sans:wght@400;500;600&display=swap');
-
-/* ===== Variables de color ===== */
 :root {
     --color-verde: #2D4A3E;
     --color-beige: #F5F1E8;
     --color-texto: #1A1A1A;
     --color-coral: #E8846B;
     --color-blanco: #FFFFFF;
-}
+}  /*variables*/
 
-/* ===== Reset básico ===== */
 * {
     margin: 0;
     padding: 0;
@@ -18,13 +13,257 @@
 }
 
 body {
-    font-family: 'Work Sans', sans-serif;
+    font-family: Verdana, Arial, sans-serif;
     color: var(--color-texto);
     background-color: var(--color-beige);
     line-height: 1.6;
 }
 
 h1, h2, h3 {
-    font-family: 'Fraunces', serif;
+    font-family: Georgia, 'Times New Roman', serif;
     line-height: 1.2;
+}
+
+/*----------------------------------------------------------------- header*/
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: var(--color-blanco);
+}
+
+.logo-texto {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-verde);
+}
+
+.botones-usuario {
+    display: flex;
+    gap: 16px;
+}
+
+.btn-consultante,
+.btn-profesional {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.btn-consultante {
+    color: var(--color-verde);
+    border: 2px solid var(--color-verde);
+    background-color: transparent;
+}
+
+.btn-consultante:hover {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+}
+
+.btn-profesional {
+    color: var(--color-blanco);
+    background-color: var(--color-coral);
+    border: 2px solid var(--color-coral);
+}
+
+.btn-profesional:hover {
+    background-color: #d1734f;
+}
+
+/*----------------------------------------------------------------- presentacion*/
+.presentacion {
+    padding: 80px 40px;
+    max-width: 700px;
+}
+
+.presentacion-titulo h1 {
+    font-size: 2.75rem;
+    color: var(--color-verde);
+    margin-bottom: 20px;
+}
+
+.presentacion-contenido {
+    font-size: 1.1rem;
+    color: var(--color-texto);
+    margin-bottom: 32px;
+}
+
+.btn-buscar-psico {
+    display: inline-block;
+    text-decoration: none;
+    padding: 14px 32px;
+    border-radius: 6px;
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn-buscar-psico:hover {
+    background-color: #1f3a2f;
+}
+
+/*----------------------------------------------------------------- datos*/
+.datos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    padding: 40px;
+    background-color: var(--color-verde);
+}
+
+.datos-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-blanco);
+}
+
+.datos-icono {
+    font-size: 1.5rem;
+}
+
+.datos-item p {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+/*----------------------------------------------------------------- funcion*/
+.funcion {
+    padding: 80px 40px;
+}
+
+.funcion h2 {
+    font-size: 2rem;
+    color: var(--color-verde);
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.funcion-division {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.funcion-paso {
+    text-align: center;
+}
+
+.paso {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-coral);
+    color: var(--color-blanco);
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.funcion-paso h3 {
+    font-size: 1.2rem;
+    color: var(--color-verde);
+    margin-bottom: 12px;
+}
+
+.funcion-paso p {
+    font-size: 0.95rem;
+}
+
+.funcion-verificacion {
+    max-width: 700px;
+    margin: 56px auto 0;
+    padding: 32px;
+    background-color: var(--color-blanco);
+    border-left: 4px solid var(--color-coral);
+    border-radius: 6px;
+}
+
+.funcion-verificacion h3 {
+    font-size: 1.2rem;
+    color: var(--color-verde);
+    margin-bottom: 12px;
+}
+
+/*----------------------------------------------------------------- areas*/
+.areas {
+    padding: 80px 40px;
+    background-color: var(--color-blanco);
+    text-align: center;
+}
+
+.areas h2 {
+    font-size: 2rem;
+    color: var(--color-verde);
+    margin-bottom: 40px;
+}
+
+.areas-lista {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.areas-item {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: var(--color-beige);
+    color: var(--color-verde);
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1.5px solid var(--color-verde);
+}
+
+/*----------------------------------------------------------------- footer*/
+.footer {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    padding: 48px 40px 24px;
+    text-align: center;
+}
+
+.footer-contenido .logo-texto {
+    color: var(--color-blanco);
+    font-size: 1.3rem;
+}
+
+.footer-contenido p {
+    font-size: 0.9rem;
+    margin-top: 8px;
+    opacity: 0.85;
+}
+
+.footer-contacto {
+    margin: 24px 0;
+    font-size: 0.9rem;
+}
+
+.footer-contacto a {
+    color: var(--color-blanco);
+    font-weight: 600;
+}
+
+.footer-legal {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
