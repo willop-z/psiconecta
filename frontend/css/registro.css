@@ -1,0 +1,34 @@
+/* ===== Variables de color ===== */
+:root {
+    --color-verde: #2D4A3E;
+    --color-beige: #F5F1E8;
+    --color-texto: #1A1A1A;
+    --color-coral: #E8846B;
+    --color-blanco: #FFFFFF;
+}
+
+/* ===== Reset básico ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Verdana, Arial, sans-serif;
+    color: var(--color-texto);
+    background-color: var(--color-beige);
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.2;
+}
+
+.logo-texto {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-verde);
+}

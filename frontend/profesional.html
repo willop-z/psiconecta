@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psiconecta — Psicólogo/Practicante</title>
+    <link rel="stylesheet" href="css/registro.css">
+</head>
+<body>
+
+<header class="header-simple">
+    <a href="index.html" class="logo">
+        <span class="logo-texto">Psiconecta</span>
+    </a>
+</header>
+
+<section class="registro">
+    <div class="registro-formulario">
+        <h1>Crea tu cuenta como psicólogo o practicante</h1>
+        <p class="registro-subtitulo">Regístrate para ofrecer orientación psicológica de forma voluntaria.</p>
+
+        <form>
+            <div class="registro-campo">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="registro-campo">
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" name="correo" required>
+            </div>
+
+            <div class="registro-campo">
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" name="contrasena" required>
+            </div>
+
+            <div class="registro-campo">
+                <label for="confirmar-contrasena">Confirmar contraseña</label>
+                <input type="password" id="confirmar-contrasena" name="confirmar-contrasena" required>
+            </div>
+
+            <div class="registro-campo registro-tipo">
+                <label>¿Cuál es tu situación actual?</label>
+
+                <div class="registro-tipo-opcion">
+                    <input type="radio" id="tipo-profesional" name="tipo" value="profesional" required>
+                    <label for="tipo-profesional">Soy profesional graduado</label>
+                </div>
+
+                <div class="registro-tipo-opcion">
+                    <input type="radio" id="tipo-practicante" name="tipo" value="practicante" required>
+                    <label for="tipo-practicante">Soy practicante en formación</label>
+                </div>
+            </div>
+
+            <div id="documentos-profesional" class="registro-documentos oculto">
+                <label for="doc-tarjeta">Tarjeta profesional</label>
+                <input type="file" id="doc-tarjeta" name="doc-tarjeta">
+            </div>
+
+            <div id="documentos-practicante" class="registro-documentos oculto">
+                <label for="doc-carta">Carta de la universidad</label>
+                <input type="file" id="doc-carta" name="doc-carta">
+
+                <label for="doc-aval">Aval de la universidad</label>
+                <input type="file" id="doc-aval" name="doc-aval">
+            </div>
+
+            <button type="submit" class="btn-registrar">Crear cuenta</button>
+        </form>
+    </div>
+</section>
+
+</body>
+<script src="js/script.js"></script>
+</html>
