@@ -1,0 +1,157 @@
+/* ===== Variables de color ===== */
+:root {
+    --color-verde: #2D4A3E;
+    --color-beige: #F5F1E8;
+    --color-texto: #1A1A1A;
+    --color-coral: #E8846B;
+    --color-blanco: #FFFFFF;
+}
+
+/* ===== Reset básico ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Verdana, Arial, sans-serif;
+    color: var(--color-texto);
+    background-color: var(--color-beige);
+    line-height: 1.6;
+}
+
+h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.2;
+}
+
+.logo-texto {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-verde);
+}
+
+/* ===== Header ===== */
+.header-simple {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: var(--color-blanco);
+}
+
+.header-simple .logo {
+    text-decoration: none;
+}
+
+.btn-cerrar-sesion {
+    text-decoration: none;
+    color: var(--color-verde);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ===== Sección admin ===== */
+.admin {
+    padding: 48px 40px;
+}
+
+.admin h1 {
+    font-size: 1.8rem;
+    color: var(--color-verde);
+    margin-bottom: 8px;
+}
+
+.admin-subtitulo {
+    font-size: 0.95rem;
+    opacity: 0.8;
+    margin-bottom: 32px;
+}
+
+/* ===== Tabla ===== */
+.admin-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-blanco);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.admin-tabla th,
+.admin-tabla td {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 0.9rem;
+}
+
+.admin-tabla thead {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+}
+
+.admin-tabla tbody tr {
+    border-bottom: 1px solid #eee;
+}
+
+.admin-tabla tbody tr:last-child {
+    border-bottom: none;
+}
+
+.admin-ver-doc {
+    color: var(--color-verde);
+    font-weight: 600;
+}
+
+/* ===== Estados ===== */
+.admin-estado {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.admin-estado.pendiente {
+    background-color: #FFF3CD;
+    color: #8A6D00;
+}
+
+.admin-estado.aprobado {
+    background-color: #D4EDDA;
+    color: #1E7A34;
+}
+
+.admin-estado.rechazado {
+    background-color: #F8D7DA;
+    color: #A32E3C;
+}
+
+/* ===== Botones de acción ===== */
+.btn-aprobar,
+.btn-rechazar {
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn-aprobar {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    margin-right: 6px;
+}
+
+.btn-rechazar {
+    background-color: var(--color-blanco);
+    color: #A32E3C;
+    border: 1.5px solid #A32E3C;
+}
+
+.btn-aprobar:hover,
+.btn-rechazar:hover {
+    opacity: 0.8;
+}

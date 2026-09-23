@@ -1,4 +1,3 @@
-/* ===== Variables de color ===== */
 :root {
     --color-verde: #2D4A3E;
     --color-beige: #F5F1E8;
@@ -7,7 +6,6 @@
     --color-blanco: #FFFFFF;
 }
 
-/* ===== Reset básico ===== */
 * {
     margin: 0;
     padding: 0;
@@ -32,3 +30,87 @@ h1, h2, h3 {
     font-weight: bold;
     color: var(--color-verde);
 }
+
+/* ===== Header simple ===== */
+.header-simple {
+    padding: 20px 40px;
+    background-color: var(--color-blanco);
+}
+
+.header-simple .logo {
+    text-decoration: none;
+}
+
+/* ===== Formulario de registro ===== */
+.registro {
+    display: flex;
+    justify-content: center;
+    padding: 60px 40px;
+}
+
+.registro-formulario {
+    width: 100%;
+    max-width: 480px;
+    background-color: var(--color-blanco);
+    padding: 40px;
+    border-radius: 10px;
+}
+
+.registro-formulario h1 {
+    font-size: 1.8rem;
+    color: var(--color-verde);
+    margin-bottom: 8px;
+}
+
+.registro-subtitulo {
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+    opacity: 0.8;
+}
+
+.registro-campo {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.registro-campo label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--color-verde);
+}
+
+.registro-campo input[type="text"],
+.registro-campo input[type="email"],
+.registro-campo input[type="password"],
+.registro-campo input[type="date"] {
+    padding: 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.registro-campo input:focus {
+    outline: none;
+    border-color: var(--color-verde);
+}
+
+.btn-registrar {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-registrar:hover {
+    background-color: #1f3a2f;
+}
+

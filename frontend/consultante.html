@@ -21,28 +21,30 @@
 
         <form>
             <div class="registro-campo">
-                <label for="nombre">Nombre completo</label>
-                <input type="text" id="nombre" name="nombre" required>
+                <label for="nombre">Nombre completo</label> <!-- for debe coincidir con el id del input -->
+                <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required> 
+                <!-- type es el dato esperado, name es el nombre del campo que va al backend, 
+                required asegura que el campo sea obligatorio -->
             </div>
 
             <div class="registro-campo">
                 <label for="correo">Correo electrónico</label>
-                <input type="email" id="correo" name="correo" required>
+                <input type="email" id="correo" name="correo" placeholder="Ingresa tu correo" required>
             </div>
 
             <div class="registro-campo">
                 <label for="contrasena">Contraseña</label>
-                <input type="password" id="contrasena" name="contrasena" required>
+                <input type="password" id="contrasena" name="contrasena" placeholder="Crea una contraseña" required>
             </div>
 
             <div class="registro-campo">
                 <label for="confirmar-contrasena">Confirmar contraseña</label>
-                <input type="password" id="confirmar-contrasena" name="confirmar-contrasena" required>
+                <input type="password" id="confirmar-contrasena" name="confirmar-contrasena" placeholder="Confirma tu contraseña" required>
             </div>
 
-            <div class="registro-campo registro-campo-checkbox">
-                <input type="checkbox" id="mayor-edad" name="mayor-edad" required>
-                <label for="mayor-edad">Declaro que soy mayor de edad</label>
+            <div class="registro-campo">
+                <label for="fecha-nacimiento">Fecha de nacimiento</label>
+                <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" required>
             </div>
 
             <button type="submit" class="btn-registrar">Crear cuenta</button>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psiconecta — Panel de administrador</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<header class="header-simple">
+    <a href="index.html" class="logo">
+        <span class="logo-texto">Psiconecta</span>
+    </a>
+    <a href="index.html" class="btn-cerrar-sesion">Cerrar sesión</a>
+</header>
+
+<section class="admin">
+    <h1>Documentos pendientes de verificación</h1>
+    <p class="admin-subtitulo">Revisa y aprueba o rechaza los documentos cargados por psicólogos y practicantes.</p>
+
+    <table class="admin-tabla">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Documento</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Laura Ramírez</td>
+                <td>Profesional</td>
+                <td><a href="#" class="admin-ver-doc">Tarjeta profesional</a></td>
+                <td><span class="admin-estado pendiente">Pendiente</span></td>
+                <td>
+                    <button class="btn-aprobar">Aprobar</button>
+                    <button class="btn-rechazar">Rechazar</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Andrés Torres</td>
+                <td>Practicante</td>
+                <td><a href="#" class="admin-ver-doc">Carta de universidad</a></td>
+                <td><span class="admin-estado pendiente">Pendiente</span></td>
+                <td>
+                    <button class="btn-aprobar">Aprobar</button>
+                    <button class="btn-rechazar">Rechazar</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Sofía Medina</td>
+                <td>Practicante</td>
+                <td><a href="#" class="admin-ver-doc">Aval de universidad</a></td>
+                <td><span class="admin-estado pendiente">Pendiente</span></td>
+                <td>
+                    <button class="btn-aprobar">Aprobar</button>
+                    <button class="btn-rechazar">Rechazar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+</body>
+<script src="js/script.js"></script>
+</html>
