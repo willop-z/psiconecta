@@ -1,0 +1,189 @@
+/* ===== Variables de color ===== */
+:root {
+    --color-verde: #2D4A3E;
+    --color-beige: #F5F1E8;
+    --color-texto: #1A1A1A;
+    --color-coral: #E8846B;
+    --color-blanco: #FFFFFF;
+}
+
+/* ===== Reset básico ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Verdana, Arial, sans-serif;
+    color: var(--color-texto);
+    background-color: var(--color-beige);
+    line-height: 1.6;
+}
+
+h1, h2 {
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.2;
+}
+
+.logo-texto {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-verde);
+}
+
+/* ===== Header ===== */
+.header-simple {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: var(--color-blanco);
+}
+
+.header-simple .logo {
+    text-decoration: none;
+}
+
+.btn-cerrar-sesion {
+    text-decoration: none;
+    color: var(--color-verde);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ===== Panel del psicólogo ===== */
+.psicologo {
+    padding: 48px 40px;
+}
+
+.psicologo h1 {
+    font-size: 1.8rem;
+    color: var(--color-verde);
+    display: inline-block;
+    margin-right: 14px;
+}
+
+.psicologo-estado {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.psicologo-estado.aprobado {
+    background-color: #D4EDDA;
+    color: #1E7A34;
+}
+
+.psicologo-estado.pendiente {
+    background-color: #FFF3CD;
+    color: #8A6D00;
+}
+
+.psicologo-estado.rechazado {
+    background-color: #F8D7DA;
+    color: #A32E3C;
+}
+
+/* ===== Disponibilidad ===== */
+.psicologo-disponibilidad {
+    background-color: var(--color-blanco);
+    padding: 28px;
+    border-radius: 10px;
+    margin-top: 32px;
+}
+
+.psicologo-disponibilidad h2 {
+    font-size: 1.2rem;
+    color: var(--color-verde);
+    margin-bottom: 16px;
+}
+
+.disponibilidad-lista {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.disponibilidad-lista li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95rem;
+}
+
+.disponibilidad-lista li:last-child {
+    border-bottom: none;
+}
+
+.btn-editar-disponibilidad {
+    border: 1.5px solid var(--color-verde);
+    background-color: transparent;
+    color: var(--color-verde);
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-editar-disponibilidad:hover {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+}
+
+/* ===== Citas ===== */
+.psicologo-citas {
+    background-color: var(--color-blanco);
+    padding: 28px;
+    border-radius: 10px;
+    margin-top: 24px;
+}
+
+.psicologo-citas h2 {
+    font-size: 1.2rem;
+    color: var(--color-verde);
+    margin-bottom: 16px;
+}
+
+.citas-tabla {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.citas-tabla th,
+.citas-tabla td {
+    text-align: left;
+    padding: 12px 8px;
+    font-size: 0.9rem;
+}
+
+.citas-tabla thead {
+    background-color: var(--color-beige);
+}
+
+.citas-tabla tbody tr {
+    border-bottom: 1px solid #eee;
+}
+
+.citas-tabla tbody tr:last-child {
+    border-bottom: none;
+}
+
+.cita-estado {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.cita-estado.confirmada {
+    background-color: #D4EDDA;
+    color: #1E7A34;
+}
+
+.cita-estado.pendiente {
+    background-color: #FFF3CD;
+    color: #8A6D00;
+}
