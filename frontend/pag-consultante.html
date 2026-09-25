@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psiconecta — Buscar psicólogo</title>
+    <link rel="stylesheet" href="css/pag-consultante.css">
+</head>
+<body>
+
+<header class="header-simple">
+    <a href="index.html" class="logo">
+        <span class="logo-texto">Psiconecta</span>
+    </a>
+    <a href="index.html" class="btn-cerrar-sesion">Cerrar sesión</a>
+</header>
+
+<section class="busqueda">
+    <h1>Encuentra un psicólogo</h1>
+
+    <div class="busqueda-filtros">
+        <div class="filtro-campo">
+            <label for="filtro-tipo">Tipo de profesional</label>
+            <select id="filtro-tipo" name="filtro-tipo">
+                <option value="">Todos</option>
+                <option value="profesional">Profesional graduado</option>
+                <option value="practicante">Practicante en formación</option>
+            </select>
+        </div>
+
+        <div class="filtro-campo">
+            <label for="filtro-area">Área de interés</label>
+            <select id="filtro-area" name="filtro-area">
+                <option value="">Todas</option>
+                <option value="ansiedad">Ansiedad</option>
+                <option value="depresion">Depresión</option>
+                <option value="pareja">Relación de pareja</option>
+                <option value="duelo">Duelo</option>
+                <option value="sexualidad">Sexualidad</option>
+                <option value="autoestima">Autoestima</option>
+                <option value="estres">Estrés académico o laboral</option>
+                <option value="familia">Familia</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="busqueda-resultados">
+        <div class="psicologo-card">
+            <h3>Laura Ramírez</h3>
+            <span class="psicologo-tipo">Profesional graduado</span>
+            <div class="psicologo-areas">
+                <span class="areas-item">Ansiedad</span>
+                <span class="areas-item">Autoestima</span>
+            </div>
+            <a href="perfil-psicologo.html" class="btn-ver-perfil">Ver perfil</a>
+        </div>
+
+        <div class="psicologo-card">
+            <h3>Andrés Torres</h3>
+            <span class="psicologo-tipo">Practicante en formación</span>
+            <div class="psicologo-areas">
+                <span class="areas-item">Duelo</span>
+                <span class="areas-item">Familia</span>
+            </div>
+            <a href="perfil-psicologo.html" class="btn-ver-perfil">Ver perfil</a>
+        </div>
+
+        <div class="psicologo-card">
+            <h3>Sofía Medina</h3>
+            <span class="psicologo-tipo">Profesional graduado</span>
+            <div class="psicologo-areas">
+                <span class="areas-item">Relación de pareja</span>
+                <span class="areas-item">Sexualidad</span>
+            </div>
+            <a href="perfil-psicologo.html" class="btn-ver-perfil">Ver perfil</a>
+        </div>
+    </div>
+</section>
+
+</body>
+<script src="js/script.js"></script>
+</html>

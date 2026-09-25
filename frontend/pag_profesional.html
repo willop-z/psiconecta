@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psiconecta — Panel del psicólogo</title>
+    <link rel="stylesheet" href="css/pag-profesional.css">
+</head>
+<body>
+
+<header class="header-simple">
+    <a href="index.html" class="logo">
+        <span class="logo-texto">Psiconecta</span>
+    </a>
+    <a href="index.html" class="btn-cerrar-sesion">Cerrar sesión</a>
+</header>
+
+<section class="psicologo">
+    <h1>Bienvenido, Laura Ramírez</h1>
+    <span class="psicologo-estado aprobado">Cuenta verificada</span>
+
+    <div class="psicologo-disponibilidad">
+        <h2>Tu disponibilidad</h2>
+        <ul class="disponibilidad-lista">
+            <li>Lunes: 8:00am – 12:00pm</li>
+            <li>Miércoles: 2:00pm – 6:00pm</li>
+            <li>Viernes: 8:00am – 10:00am</li>
+        </ul>
+        <button class="btn-editar-disponibilidad">Editar disponibilidad</button>
+    </div>
+
+    <div class="psicologo-citas">
+        <h2>Tus próximas citas</h2>
+        <table class="citas-tabla">
+            <thead>
+                <tr>
+                    <th>Consultante</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Camila Rojas</td>
+                    <td>26/09/2026</td>
+                    <td>8:00am</td>
+                    <td><span class="cita-estado confirmada">Confirmada</span></td>
+                </tr>
+                <tr>
+                    <td>Juan Pablo Díaz</td>
+                    <td>28/09/2026</td>
+                    <td>2:00pm</td>
+                    <td><span class="cita-estado pendiente">Pendiente</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+</body>
+<script src="js/script.js"></script>
+</html>

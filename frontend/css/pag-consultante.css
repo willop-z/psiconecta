@@ -1,0 +1,155 @@
+/* ===== Variables de color ===== */
+:root {
+    --color-verde: #2D4A3E;
+    --color-beige: #F5F1E8;
+    --color-texto: #1A1A1A;
+    --color-coral: #E8846B;
+    --color-blanco: #FFFFFF;
+}
+
+/* ===== Reset básico ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Verdana, Arial, sans-serif;
+    color: var(--color-texto);
+    background-color: var(--color-beige);
+    line-height: 1.6;
+}
+
+h1, h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.2;
+}
+
+.logo-texto {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-verde);
+}
+
+/* ===== Header ===== */
+.header-simple {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: var(--color-blanco);
+}
+
+.header-simple .logo {
+    text-decoration: none;
+}
+
+.btn-cerrar-sesion {
+    text-decoration: none;
+    color: var(--color-verde);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ===== Búsqueda ===== */
+.busqueda {
+    padding: 48px 40px;
+}
+
+.busqueda h1 {
+    font-size: 1.8rem;
+    color: var(--color-verde);
+    margin-bottom: 32px;
+}
+
+/* ===== Filtros ===== */
+.busqueda-filtros {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.filtro-campo {
+    display: flex;
+    flex-direction: column;
+    min-width: 220px;
+}
+
+.filtro-campo label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-verde);
+    margin-bottom: 6px;
+}
+
+.filtro-campo select {
+    padding: 10px 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background-color: var(--color-blanco);
+}
+
+/* ===== Resultados ===== */
+.busqueda-resultados {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.psicologo-card {
+    background-color: var(--color-blanco);
+    padding: 24px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.psicologo-card h3 {
+    font-size: 1.1rem;
+    color: var(--color-verde);
+    margin-bottom: 4px;
+}
+
+.psicologo-tipo {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-bottom: 14px;
+}
+
+.psicologo-areas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.psicologo-areas .areas-item {
+    padding: 5px 12px;
+    border-radius: 20px;
+    background-color: var(--color-beige);
+    color: var(--color-verde);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1.5px solid var(--color-verde);
+}
+
+.btn-ver-perfil {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.btn-ver-perfil:hover {
+    background-color: #1f3a2f;
+}
