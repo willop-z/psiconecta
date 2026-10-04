@@ -84,6 +84,65 @@ h1, h2 {
     color: #A32E3C;
 }
 
+/*----------------------------------------------------------------------- perfil*/
+.psicologo-perfil {
+    background-color: var(--color-blanco);
+    padding: 28px;
+    border-radius: 10px;
+    margin-top: 32px;
+}
+
+.psicologo-perfil h2 {
+    font-size: 1.2rem;
+    color: var(--color-verde);
+    margin-bottom: 20px;
+}
+
+.perfil-campo {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+.perfil-campo label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-verde);
+    margin-bottom: 6px;
+}
+
+.perfil-campo input,
+.perfil-campo textarea {
+    padding: 10px 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.perfil-campo input:focus,
+.perfil-campo textarea:focus {
+    outline: none;
+    border-color: var(--color-verde);
+}
+
+.btn-guardar-perfil {
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-guardar-perfil:hover {
+    background-color: #1f3a2f;
+}
+
 /*---------------------------------------------------------------------- disponibilidad*/
 .psicologo-disponibilidad {
     background-color: var(--color-blanco);

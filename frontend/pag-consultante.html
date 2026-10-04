@@ -15,10 +15,16 @@
     <a href="index.html" class="btn-cerrar-sesion">Cerrar sesión</a>
 </header>
 
-<section class="busqueda">
-    <h1>Encuentra un psicólogo</h1>
+<section class="consultante">
+    <div class="tabs">
+        <button class="tab-btn activo" data-tab="buscar">Buscar psicólogos</button>
+        <button class="tab-btn" data-tab="historial">Mi historial</button>
+    </div>
 
-    <div class="busqueda-filtros">
+    <div id="tab-buscar" class="tab-panel">
+        <h1>Encuentra un psicólogo</h1>
+
+        <div class="busqueda-filtros">
         <div class="filtro-campo">
             <label for="filtro-tipo">Tipo de profesional</label>
             <select id="filtro-tipo" name="filtro-tipo">
@@ -46,37 +52,71 @@
 
     <div class="busqueda-resultados">
         <div class="psicologo-card">
-            <h3>Brayan Riveros</h3>
+            <h3>Wilmer García</h3>
             <span class="psicologo-tipo">Profesional graduado</span>
             <div class="psicologo-areas">
-                <span class="areas-item">Familia</span>
+                <span class="areas-item">Ansiedad</span>
                 <span class="areas-item">Autoestima</span>
+                <span class="areas-item">Duelo</span>
             </div>
-            <a href="perfil-psicologo.html" class="btn-ver-perfil">Ver perfil</a>
+            <a href="pag-perfil.html" class="btn-ver-perfil">Ver perfil</a>
         </div>
 
         <div class="psicologo-card">
-            <h3>Andrés Torres</h3>
+            <h3>Karen Rodríguez</h3>
             <span class="psicologo-tipo">Practicante en formación</span>
             <div class="psicologo-areas">
-                <span class="areas-item">Duelo</span>
+                <span class="areas-item">Relación de pareja</span>
                 <span class="areas-item">Familia</span>
+                <span class="areas-item">Sexualidad</span>
             </div>
-            <a href="perfil-psicologo.html" class="btn-ver-perfil">Ver perfil</a>
+            <a href="pag-perfil.html" class="btn-ver-perfil">Ver perfil</a>
         </div>
 
         <div class="psicologo-card">
-            <h3>Sofía Medina</h3>
+            <h3>Pablo López</h3>
             <span class="psicologo-tipo">Profesional graduado</span>
             <div class="psicologo-areas">
-                <span class="areas-item">Relación de pareja</span>
-                <span class="areas-item">Sexualidad</span>
+                <span class="areas-item">Depresión</span>
+                <span class="areas-item">Autoestima</span>
+                <span class="areas-item">Estrés académico o laboral</span>
             </div>
-            <a href="perfil-psicologo.html" class="btn-ver-perfil">Ver perfil</a>
+            <a href="pag-perfil.html" class="btn-ver-perfil">Ver perfil</a>
         </div>
+    </div>
+    </div>
+
+    <div id="tab-historial" class="tab-panel oculto">
+        <h1>Mi historial de encuentros</h1>
+
+        <table class="historial-tabla">
+            <thead>
+                <tr>
+                    <th>Psicólogo</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Calificación</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Laura Ramírez</td>
+                    <td>10/09/2026</td>
+                    <td><span class="cita-estado realizada">Realizada</span></td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                </tr>
+                <tr>
+                    <td>Andrés Torres</td>
+                    <td>15/08/2026</td>
+                    <td><span class="cita-estado realizada">Realizada</span></td>
+                    <td>⭐⭐⭐⭐</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </section>
 
+<script src="js/pag-consultante.js"></script>
 </body>
-<script src="js/script.js"></script>
+
 </html>

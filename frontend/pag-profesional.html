@@ -19,6 +19,28 @@
     <h1>Bienvenido, Wilmer García</h1>
     <span class="psicologo-estado aprobado">Cuenta verificada</span>
 
+    <div class="psicologo-perfil">
+    <h2>Tu perfil público</h2>
+    <form id="form-perfil">
+        <div class="perfil-campo">
+            <label for="anios-experiencia">Años de experiencia</label>
+            <input type="number" id="anios-experiencia" name="anios-experiencia" placeholder="Ingrese únicamente números" min="0">
+        </div>
+
+        <div class="perfil-campo">
+            <label for="especialidad">Especialidad / Maestría</label>
+            <input type="text" id="especialidad" name="especialidad" placeholder="Ej: Maestría en Terapia Cognitivo-Conductual">
+        </div>
+
+        <div class="perfil-campo">
+            <label for="biografia">Biografía breve</label>
+            <textarea id="biografia" name="biografia" rows="4" placeholder="Cuéntale a los consultantes un poco sobre tu enfoque y forma de trabajo."></textarea>
+        </div>
+
+        <button type="submit" class="btn-guardar-perfil">Guardar cambios</button>
+    </form>
+</div>
+
     <div class="psicologo-disponibilidad">
         <h2>Tu disponibilidad</h2>
         <ul class="disponibilidad-lista">
