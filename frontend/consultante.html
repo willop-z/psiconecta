@@ -19,7 +19,7 @@
         <h1>Crea tu cuenta como consultante</h1>
         <p class="registro-subtitulo">Regístrate para explorar psicólogos y practicantes disponibles.</p>
 
-        <form>
+        <form id="form-registro-consultante">
             <div class="registro-campo">
                 <label for="nombre">Nombre completo</label> <!-- for debe coincidir con el id del input -->
                 <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required> 
@@ -48,10 +48,13 @@
             </div>
 
             <button type="submit" class="btn-registrar">Crear cuenta</button>
+            <p id="mensaje"></p>
+            
         </form>
     </div>
 </section>
 
-</body>
 <script src="js/script.js"></script>
+
+</body>
 </html>
