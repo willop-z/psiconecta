@@ -51,6 +51,22 @@ h1, h3 {
     font-weight: 600;
 }
 
+.header-usuario {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-saludo {
+    font-size: 0.9rem;
+    color: var(--color-verde);
+    opacity: 0.8;
+}
+
+.header-saludo .nombre-usuario {
+    font-weight: 600;
+}
+
 /*---------------------------------------------------------------------- búsqueda*/
 .consultante {
     padding: 48px 40px;

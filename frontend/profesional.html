@@ -19,7 +19,7 @@
         <h1>Crea tu cuenta como psicólogo o practicante</h1>
         <p class="registro-subtitulo">Regístrate para ofrecer orientación psicológica de forma voluntaria.</p>
 
-        <form>
+        <form id="form-registro-profesional">
             <div class="registro-campo">
                 <label for="nombre">Nombre completo</label> 
                 <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
@@ -56,15 +56,15 @@
 
             <div id="documentos-profesional" class="registro-documentos oculto">
                 <label for="doc-tarjeta">Tarjeta profesional</label>
-                <input type="file" id="doc-tarjeta" name="doc-tarjeta">
+                <input type="file" id="doc-tarjeta" name="docTarjeta">
             </div>
 
             <div id="documentos-practicante" class="registro-documentos oculto">
                 <label for="doc-carta">Carta de la universidad</label>
-                <input type="file" id="doc-carta" name="doc-carta">
+                <input type="file" id="doc-carta" name="docCarta">
 
                 <label for="doc-aval">Aval de la universidad</label>
-                <input type="file" id="doc-aval" name="doc-aval">
+                <input type="file" id="doc-aval" name="docAval">
             </div>
 
             <button type="submit" class="btn-registrar">Crear cuenta</button>
@@ -73,5 +73,5 @@
 </section>
 
 </body>
-<script src="js/script.js"></script>
+<script src="js/profesional.js"></script>
 </html>

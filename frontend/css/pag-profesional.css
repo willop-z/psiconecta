@@ -44,6 +44,16 @@ h1, h2 {
     text-decoration: none;
 }
 
+.header-saludo {
+    font-size: 0.9rem;
+    color: var(--color-verde);
+    opacity: 0.8;
+}
+
+.header-saludo .nombre-usuario {
+    font-weight: 600;
+}
+
 .btn-cerrar-sesion {
     text-decoration: none;
     color: var(--color-verde);

@@ -1,24 +1,33 @@
 const formLogin = document.getElementById('form-login');
 
-const USUARIOS_PRUEBA = [
-    { correo: 'consultante@correo.com', contrasena: '123', destino: 'pag-consultante.html' },
-    { correo: 'profesional@correo.com', contrasena: '123', destino: 'pag-profesional.html' },
-    { correo: 'admin@correo.com', contrasena: '123', destino: 'admin.html' }
-];
+// A qué página va cada rol después de iniciar sesión
+const DESTINOS = {
+    consultante: 'pag-consultante.html',
+    psicologo: 'pag-profesional.html',
+    admin: 'admin.html'
+};
 
-formLogin.addEventListener('submit', function(evento) {
+formLogin.addEventListener('submit', async function(evento) {
     evento.preventDefault();
 
-    const correoIngresado = document.getElementById('correo').value;
-    const contrasenaIngresada = document.getElementById('contrasena').value;
+    const correo = document.getElementById('correo').value;
+    const contrasena = document.getElementById('contrasena').value;
 
-    const usuarioEncontrado = USUARIOS_PRUEBA.find(function(usuario) {
-        return usuario.correo === correoIngresado && usuario.contrasena === contrasenaIngresada;
-    });
+    try {
+        const respuesta = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correo, contrasena })
+        });
+        const datos = await respuesta.json();
 
-    if (usuarioEncontrado) {
-        window.location.href = usuarioEncontrado.destino;
-    } else {
-        alert('Correo o contraseña incorrectos');
+        if (!respuesta.ok) {
+            alert(datos.mensaje);
+            return;
+        }
+
+        window.location.href = DESTINOS[datos.rol];
+    } catch (error) {
+        alert('No se pudo conectar con el servidor');
     }
 });

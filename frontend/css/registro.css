@@ -114,4 +114,30 @@ h1, h2, h3 {
     background-color: #1f3a2f;
 }
 
+/* ===== Documentos ===== */
+.registro-documentos {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 24px;
+}
 
+.registro-documentos label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-verde);
+}
+
+.registro-documentos input[type="file"] {
+    margin-bottom: 14px;
+    font-size: 0.9rem;
+}
+
+.registro-documentos input[type="file"]:last-child {
+    margin-bottom: 0;
+}
+
+/* ===== Utilidad: ocultar elementos ===== */
+.oculto {
+    display: none !important;
+}
