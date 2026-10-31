@@ -16,14 +16,14 @@ const app = express();
 
 const session = require("express-session");
 
-// Solo se aceptan estos tipos de archivo
+// -------------------------------------------------tipos de archivo que puede subir el profesional en el registro
 const TIPOS_PERMITIDOS = {
     "application/pdf": ".pdf",
     "image/jpeg": ".jpg",
     "image/png": ".png"
 };
 
-// Los archivos se guardan en backend/uploads con un nombre aleatorio
+// ---------------------------------------------- los archivos se guardan en backend/uploads con nombre aleatorio
 const almacenamiento = multer.diskStorage({
     destination: path.join(__dirname, "uploads"),
     filename: function (req, file, cb) {
@@ -34,7 +34,7 @@ const almacenamiento = multer.diskStorage({
 
 const subida = multer({
     storage: almacenamiento,
-    limits: { fileSize: 5 * 1024 * 1024 }, // máximo 5 MB por archivo
+    limits: { fileSize: 5 * 1024 * 1024 }, // ---------------máximo 5MB por archivo
     fileFilter: function (req, file, cb) {
         if (TIPOS_PERMITIDOS[file.mimetype]) {
             cb(null, true);
@@ -50,7 +50,7 @@ const camposDocumentos = subida.fields([
     { name: "docAval", maxCount: 1 }
 ]);
 
-// Qué documentos exige cada tipo de psicólogo
+// ------------------------------------------ los documentos que se piden según el profesional
 const DOCUMENTOS_POR_TIPO = {
     profesional: [{ campo: "docTarjeta", tipo: "tarjeta_profesional" }],
     practicante: [
@@ -81,14 +81,14 @@ app.use(session({
     }
 }));
 
-// Página de inicio de cada rol (a donde se manda a quien entra a una página que no le corresponde)
+//------------------------------------- página de inicio de cada rol, igual si intenta entrar a una página que no le corresponde
 const PAGINA_INICIO = {
     consultante: "/pag-consultante.html",
     psicologo: "/pag-profesional.html",
     admin: "/admin.html"
 };
 
-// Guardia: deja pasar solo a quien tenga sesión y uno de los roles permitidos
+// --------------------------------------------- permite pasar solo a quien tenga sesión y uno de los roles permitidos
 function exigirRol(...rolesPermitidos) {
     return function (req, res, next) {
         const usuario = req.session.usuario;
@@ -106,7 +106,7 @@ function exigirRol(...rolesPermitidos) {
     };
 }
 
-// Páginas privadas y el rol que puede verlas
+//---------------------------------------------------páginas privadas y el rol que puede verlas
 const PAGINAS_PRIVADAS = {
     "/admin.html": "admin",
     "/pag-consultante.html": "consultante",
@@ -114,7 +114,7 @@ const PAGINAS_PRIVADAS = {
     "/pag-profesional.html": "psicologo"
 };
 
-// Lo que cualquiera puede abrir sin iniciar sesión
+//------------------------------------------------ páginas abiertas que puede acceder cualquier persona sin sesión
 const PAGINAS_PUBLICAS = ["", "/index.html", "/login.html", "/consultante.html", "/profesional.html"];
 const CARPETAS_PUBLICAS = ["/css/", "/js/", "/images/"];
 
@@ -189,7 +189,7 @@ app.get("/api/areas", async function (req, res) {
     }
 });
 
-// Calcula la edad a partir de la fecha de nacimiento (formato AAAA-MM-DD)
+//--------------------------------------- para calcular la edad con la fecha de nacimiento (formato AAAA-MM-DD)
 function calcularEdad(fechaTexto) {
     const partes = fechaTexto.split("-").map(Number);
     const anio = partes[0];
@@ -213,12 +213,12 @@ function calcularEdad(fechaTexto) {
     app.post("/api/registro/consultante", async function (req, res) {
     const { nombre, correo, contrasena, confirmarContrasena, fechaNacimiento } = req.body;
 
-  // 1. Validar que lleguen todos los datos
+  // 1. valida que se llenen todos los espacios
     if (!nombre || !correo || !contrasena || !confirmarContrasena || !fechaNacimiento) {
         return res.status(400).json({ mensaje: "Faltan datos" });
     }
 
-  // 2. Validar la contraseña
+  // 2. valida que ambas contraseñas coicidan y sean < 8 caracteres
     if (contrasena.length < 8) {
         return res.status(400).json({ mensaje: "La contraseña debe tener mínimo 8 caracteres" });
     }
@@ -226,7 +226,7 @@ function calcularEdad(fechaTexto) {
         return res.status(400).json({ mensaje: "Las contraseñas no coinciden" });
     }
 
-  // 3. Validar la fecha y la mayoría de edad
+  // 3. valida fecha de nacimiento y que sea >= 18años
     if (!/^\d{4}-\d{2}-\d{2}$/.test(fechaNacimiento)) {
         return res.status(400).json({ mensaje: "Fecha de nacimiento no válida" });
     }
@@ -234,7 +234,7 @@ function calcularEdad(fechaTexto) {
         return res.status(400).json({ mensaje: "El servicio es solo para mayores de 18 años" });
     }
 
-  // 4. Proteger la contraseña con hash y generar el token de verificación
+  // 4. proteger la contraseña con hash y generar el token de verificación
     const contrasenaHash = await bcrypt.hash(contrasena, 10);
     const tokenVerificacion = crypto.randomBytes(32).toString("hex");
 
@@ -260,11 +260,11 @@ function calcularEdad(fechaTexto) {
         } catch (errorCorreo) {
             console.log("No se pudo enviar el correo de verificación:", errorCorreo.message);
         }
-        res.status(201).json({ mensaje: "Cuenta creada. Falta verificar tu correo." });
+        res.status(201).json({ mensaje: "Cuenta creada. Falta verificar tu correo (recuerda verificar la carpeta de spam)." });
         } catch (error) {
         await cx.rollback();
         if (error.code === "ER_DUP_ENTRY") {
-            return res.status(409).json({ mensaje: "Ese correo ya está registrado" });
+            return res.status(409).json({ mensaje: "El correo ingresado ya se encuentra registrado" });
         }
         console.log("Error en registro:", error.message);
         res.status(500).json({ mensaje: "No se pudo crear la cuenta" });
@@ -273,17 +273,17 @@ function calcularEdad(fechaTexto) {
         }
 });
 
-// -------------------------------------------------------------------------------------------------- ruta registro psicólogo/practicante
+// ------------------------------------------------------------------------------------- ruta registro psicólogo/practicante
 app.post("/api/registro/psicologo", function (req, res) {
     camposDocumentos(req, res, async function (errorSubida) {
 
-        // 1. Errores al recibir los archivos
+        // 1. posibles errores al momento de subir los archivos
         if (errorSubida) {
             if (errorSubida.code === "LIMIT_FILE_SIZE") {
                 return res.status(400).json({ mensaje: "Cada archivo debe pesar máximo 5 MB" });
             }
             if (errorSubida.message === "TIPO_NO_PERMITIDO") {
-                return res.status(400).json({ mensaje: "Solo se permiten archivos PDF, JPG o PNG" });
+                return res.status(400).json({ mensaje: "Solo se permiten archivos en formato .PDF, .JPG o .PNG" });
             }
             return res.status(400).json({ mensaje: "No se pudieron recibir los documentos" });
         }
@@ -291,10 +291,10 @@ app.post("/api/registro/psicologo", function (req, res) {
         const archivos = req.files || {};
         const { nombre, correo, contrasena, confirmarContrasena, tipo } = req.body;
 
-        // 2. Validar los datos de texto
+        // 2. valida los campos de texto
         if (!nombre || !correo || !contrasena || !confirmarContrasena || !tipo) {
             borrarArchivos(archivos);
-            return res.status(400).json({ mensaje: "Faltan datos" });
+            return res.status(400).json({ mensaje: "Faltan campos por diligenciar" });
         }
         if (contrasena.length < 8) {
             borrarArchivos(archivos);
@@ -309,7 +309,7 @@ app.post("/api/registro/psicologo", function (req, res) {
             return res.status(400).json({ mensaje: "Tipo de profesional no válido" });
         }
 
-        // 3. Validar que estén los documentos que exige ese tipo
+        // 3. valida que se suban los archivos según el tipo profesional
         const requeridos = DOCUMENTOS_POR_TIPO[tipo];
         const faltan = requeridos.some(function (doc) {
             return !archivos[doc.campo];
@@ -319,7 +319,7 @@ app.post("/api/registro/psicologo", function (req, res) {
             return res.status(400).json({ mensaje: "Debes cargar todos los documentos requeridos" });
         }
 
-        // Descarta los archivos que este tipo de profesional no necesita
+        // descarta los archivos que este tipo de profesional no necesita
         const camposUsados = requeridos.map(function (doc) { return doc.campo; });
         Object.keys(archivos).forEach(function (campo) {
             if (!camposUsados.includes(campo)) {
@@ -362,12 +362,12 @@ app.post("/api/registro/psicologo", function (req, res) {
                 console.log("No se pudo enviar el correo de verificación:", errorCorreo.message);
             }
 
-            res.status(201).json({ mensaje: "Cuenta creada. Un administrador revisará tus documentos. Falta verificar tu correo." });
+            res.status(201).json({ mensaje: "La cuenta ha sido creada con éxito, falta verificar tu correo (recuerda verificar la carpeta de spam). Un administrador revisará tus documentos para aprobarlos." });
         } catch (error) {
             await cx.rollback();
             borrarArchivos(archivos);
             if (error.code === "ER_DUP_ENTRY") {
-                return res.status(409).json({ mensaje: "Ese correo ya está registrado" });
+                return res.status(409).json({ mensaje: "El correo ingresado ya se encuentra registrado" });
             }
             console.log("Error en registro de psicólogo:", error.message);
             res.status(500).json({ mensaje: "No se pudo crear la cuenta" });
@@ -377,7 +377,7 @@ app.post("/api/registro/psicologo", function (req, res) {
     });
 });
 
-// -------------------------------------------------------------------------------------------------- ruta verificación de cuenta (enlace del correo)
+// --------------------------------------------------------------------- ruta verificación de cuenta (enlace del correo)
 app.get("/verificar", async function (req, res) {
     const token = req.query.token;
 
@@ -392,12 +392,12 @@ app.get("/verificar", async function (req, res) {
         );
 
         if (resultado.affectedRows === 0) {
-            return res.status(400).send("El enlace no es válido o ya fue usado.");
+            return res.status(400).send("El enlace no es válido o ya fue usado");
         }
 
         res.send(`
             <h1>¡Cuenta verificada!</h1>
-            <p>Ya puedes iniciar sesión.</p>
+            <p>Ya puedes iniciar sesión con el correo y contraseña registrados.</p>
             <a href="/login.html">Ir a iniciar sesión</a>
         `);
     } catch (error) {
@@ -411,7 +411,7 @@ app.post("/api/login", async function (req, res) {
     const { correo, contrasena } = req.body;
 
     if (!correo || !contrasena) {
-        return res.status(400).json({ mensaje: "Faltan datos" });
+        return res.status(400).json({ mensaje: "Faltan campos por diligenciar" });
     }
 
     try {
@@ -422,17 +422,17 @@ app.post("/api/login", async function (req, res) {
 
         // Mismo mensaje si el correo no existe o la contraseña falla
         if (filas.length === 0) {
-            return res.status(401).json({ mensaje: "Correo o contraseña incorrectos" });
+            return res.status(401).json({ mensaje: "El correo o la contraseña ingresados no coinciden con los registrados" });
         }
 
         const usuario = filas[0];
         const coincide = await bcrypt.compare(contrasena, usuario.hash);
         if (!coincide) {
-            return res.status(401).json({ mensaje: "Correo o contraseña incorrectos" });
+            return res.status(401).json({ mensaje: "El correo o la contraseña ingresados no coinciden con los registrados" });
         }
 
         if (!usuario.verificado) {
-            return res.status(403).json({ mensaje: "Debes verificar tu correo antes de iniciar sesión" });
+            return res.status(403).json({ mensaje: "Debes verificar tu correo para poder iniciar sesión" });
         }
 
         req.session.usuario = { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol };
@@ -452,10 +452,293 @@ app.get("/api/sesion", function (req, res) {
     res.json({ nombre, rol });
 });
 
+// --------------------------------------------------------------------------datos del profesional que tiene sesión iniciada
+app.get("/api/profesional/perfil", exigirRol("psicologo"), async function (req, res) {
+    try {
+        const [filas] = await conexion.execute(
+            `SELECT u.nombre, p.tipo, p.estado_verificacion,
+                    p.anios_experiencia, p.especialidad, p.biografia
+                FROM PSICOLOGO p
+                JOIN USUARIO u ON u.id = p.usuario_id
+                WHERE u.id = ?`,
+            [req.session.usuario.id]
+        );
+
+        if (filas.length === 0) {
+            return res.status(404).json({ mensaje: "Perfil no encontrado" });
+        }
+        const [areas] = await conexion.execute(
+            "SELECT area_interes_id FROM PSICOLOGO_AREA_INTERES WHERE psicologo_id = (SELECT id FROM PSICOLOGO WHERE usuario_id = ?)",
+            [req.session.usuario.id]
+        );
+        res.json({
+            ...filas[0],
+            areas: areas.map(function (fila) { return fila.area_interes_id; })
+        });
+    } catch (error) {
+        console.log("Error al leer el perfil:", error.message);
+        res.status(500).json({ mensaje: "No se pudo cargar el perfil" });
+    }
+});
+
+// -------------------------------------------------guarda el perfil del psicólogo que tiene sesión iniciada y las áreas de interes
+
+app.put("/api/profesional/perfil", exigirRol("psicologo"), async function (req, res) {
+    const texto = function (valor) {
+        return typeof valor === "string" ? valor.trim() : "";
+    };
+
+    const especialidad = texto(req.body.especialidad);
+    const biografia = texto(req.body.biografia);
+    const aniosRecibidos = req.body.aniosExperiencia;
+
+    // Años de experiencia: opcional, pero si viene debe ser un entero razonable
+    let anios = null;
+    if (aniosRecibidos !== "" && aniosRecibidos !== null && aniosRecibidos !== undefined) {
+        anios = Number(aniosRecibidos);
+        if (!Number.isInteger(anios) || anios < 0 || anios > 60) {
+            return res.status(400).json({ mensaje: "Los años de experiencia deben ser un número entero entre 0 y 60" });
+        }
+    }
+    if (especialidad.length > 150) {
+        return res.status(400).json({ mensaje: "La especialidad puede tener máximo 150 caracteres" });
+    }
+    if (biografia.length > 1000) {
+        return res.status(400).json({ mensaje: "La biografía puede tener máximo 1000 caracteres" });
+    }
+
+    // Áreas de interés: una lista de ids, sin repetidos
+    if (!Array.isArray(req.body.areas)) {
+        return res.status(400).json({ mensaje: "Áreas de interés no válidas" });
+    }
+    const areas = [...new Set(req.body.areas.map(Number))];
+    if (!areas.every(function (id) { return Number.isInteger(id) && id > 0; })) {
+        return res.status(400).json({ mensaje: "Áreas de interés no válidas" });
+    }
+
+    const cx = await conexion.getConnection();
+    try {
+        const [filas] = await cx.execute(
+            "SELECT id, estado_verificacion FROM PSICOLOGO WHERE usuario_id = ?",
+            [req.session.usuario.id]
+        );
+        if (filas.length === 0) {
+            return res.status(404).json({ mensaje: "Perfil no encontrado" });
+        }
+        if (filas[0].estado_verificacion !== "aprobado") {
+            return res.status(403).json({ mensaje: "Tu cuenta debe estar aprobada para editar el perfil" });
+        }
+        const psicologoId = filas[0].id;
+
+        await cx.beginTransaction();
+
+        await cx.execute(
+            "UPDATE PSICOLOGO SET anios_experiencia = ?, especialidad = ?, biografia = ? WHERE id = ?",
+            [anios, especialidad || null, biografia || null, psicologoId]
+        );
+
+        // -------------------------------------------para actualizar las áreas que seleccione el profesional
+        await cx.execute("DELETE FROM PSICOLOGO_AREA_INTERES WHERE psicologo_id = ?", [psicologoId]);
+        for (const areaId of areas) {
+            await cx.execute(
+                "INSERT INTO PSICOLOGO_AREA_INTERES (psicologo_id, area_interes_id) VALUES (?, ?)",
+                [psicologoId, areaId]
+            );
+        }
+
+        await cx.commit();
+        res.json({ mensaje: "Perfil guardado" });
+    } catch (error) {
+        await cx.rollback();
+        if (error.code === "ER_NO_REFERENCED_ROW_2") {
+            return res.status(400).json({ mensaje: "Alguna de las áreas de interés no existe" });
+        }
+        console.log("Error al guardar el perfil:", error.message);
+        res.status(500).json({ mensaje: "No se pudo guardar el perfil" });
+    } finally {
+        cx.release();
+    }
+});
+
+// -------------------------------------------------------------- Disponibilidad del psicólogo (CRUD)
+const DIAS_VALIDOS = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
+const DURACION_MINIMA = 70; //----------------cada cita reserva un bloque de 1 h 10 min
+
+// Convierte "08:30" en minutos desde medianoche (510)
+function aMinutos(hora) {
+    const partes = hora.split(":").map(Number);
+    return partes[0] * 60 + partes[1];
+}
+
+// Devuelve el id de PSICOLOGO si la cuenta existe y está aprobada; si no, null
+async function obtenerPsicologoAprobado(usuarioId) {
+    const [filas] = await conexion.execute(
+        "SELECT id FROM PSICOLOGO WHERE usuario_id = ? AND estado_verificacion = 'aprobado'",
+        [usuarioId]
+    );
+    return filas.length > 0 ? filas[0].id : null;
+}
+
+// Revisa que la ventana sea válida; devuelve el mensaje de error, o null si está bien
+function validarVentana(dia, horaInicio, horaFin) {
+    if (!DIAS_VALIDOS.includes(dia)) return "Día no válido";
+
+    const formato = /^([01]\d|2[0-3]):[0-5]\d$/;
+    if (typeof horaInicio !== "string" || typeof horaFin !== "string" ||
+        !formato.test(horaInicio) || !formato.test(horaFin)) {
+        return "Las horas no son válidas";
+    }
+
+    const duracion = aMinutos(horaFin) - aMinutos(horaInicio);
+    if (duracion <= 0) return "La hora de fin debe ser posterior a la de inicio";
+    if (duracion < DURACION_MINIMA) return "La ventana debe durar al menos 70 minutos";
+    return null;
+}
+
+// READ: lista las ventanas del psicólogo que tiene la sesión iniciada
+app.get("/api/profesional/disponibilidad", exigirRol("psicologo"), async function (req, res) {
+    try {
+        const psicologoId = await obtenerPsicologoAprobado(req.session.usuario.id);
+        if (!psicologoId) {
+            return res.status(403).json({ mensaje: "Tu cuenta debe estar aprobada" });
+        }
+
+        const [filas] = await conexion.execute(
+            `SELECT id, dia,
+                    TIME_FORMAT(hora_inicio, '%H:%i') AS horaInicio,
+                    TIME_FORMAT(hora_fin, '%H:%i') AS horaFin
+                FROM DISPONIBILIDAD
+                WHERE psicologo_id = ?
+                ORDER BY FIELD(dia, 'lunes','martes','miercoles','jueves','viernes','sabado','domingo'), hora_inicio`,
+            [psicologoId]
+        );
+        res.json(filas);
+    } catch (error) {
+        console.log("Error al leer la disponibilidad:", error.message);
+        res.status(500).json({ mensaje: "No se pudo cargar la disponibilidad" });
+    }
+});
+
+// CREATE: agrega una ventana de horario
+app.post("/api/profesional/disponibilidad", exigirRol("psicologo"), async function (req, res) {
+    const { dia, horaInicio, horaFin } = req.body;
+
+    const errorValidacion = validarVentana(dia, horaInicio, horaFin);
+    if (errorValidacion) {
+        return res.status(400).json({ mensaje: errorValidacion });
+    }
+
+    try {
+        const psicologoId = await obtenerPsicologoAprobado(req.session.usuario.id);
+        if (!psicologoId) {
+            return res.status(403).json({ mensaje: "Tu cuenta debe estar aprobada" });
+        }
+
+        //------------------------------------------------------para que no se cree una disponibilidad con un horario ya seleccionado
+        const [cruces] = await conexion.execute(
+            "SELECT id FROM DISPONIBILIDAD WHERE psicologo_id = ? AND dia = ? AND hora_inicio < ? AND hora_fin > ?",
+            [psicologoId, dia, horaFin + ":00", horaInicio + ":00"]
+        );
+        if (cruces.length > 0) {
+            return res.status(409).json({ mensaje: "El horario seleccionado se cruza con alguna hora ya asignada" });
+        }
+
+        const [resultado] = await conexion.execute(
+            "INSERT INTO DISPONIBILIDAD (psicologo_id, dia, hora_inicio, hora_fin) VALUES (?, ?, ?, ?)",
+            [psicologoId, dia, horaInicio + ":00", horaFin + ":00"]
+        );
+        res.status(201).json({ mensaje: "Ventana agregada", id: resultado.insertId });
+    } catch (error) {
+        console.log("Error al agregar la ventana:", error.message);
+        res.status(500).json({ mensaje: "No se pudo agregar la ventana" });
+    }
+});
+
+// Convierte el :id de la URL en un entero válido (o null)
+function leerId(valor) {
+    const id = Number(valor);
+    return Number.isInteger(id) && id > 0 ? id : null;
+}
+
+// UPDATE: modifica una ventana existente
+app.put("/api/profesional/disponibilidad/:id", exigirRol("psicologo"), async function (req, res) {
+    const id = leerId(req.params.id);
+    if (!id) {
+        return res.status(400).json({ mensaje: "Ventana no válida" });
+    }
+
+    const { dia, horaInicio, horaFin } = req.body;
+    const errorValidacion = validarVentana(dia, horaInicio, horaFin);
+    if (errorValidacion) {
+        return res.status(400).json({ mensaje: errorValidacion });
+    }
+
+    try {
+        const psicologoId = await obtenerPsicologoAprobado(req.session.usuario.id);
+        if (!psicologoId) {
+            return res.status(403).json({ mensaje: "Tu cuenta debe estar aprobada" });
+        }
+
+        // La ventana debe existir y ser de este psicólogo
+        const [propias] = await conexion.execute(
+            "SELECT id FROM DISPONIBILIDAD WHERE id = ? AND psicologo_id = ?",
+            [id, psicologoId]
+        );
+        if (propias.length === 0) {
+            return res.status(404).json({ mensaje: "No se encontró esa ventana" });
+        }
+
+        // No puede cruzarse con otra ventana del mismo día (sin contarse a sí misma)
+        const [cruces] = await conexion.execute(
+            "SELECT id FROM DISPONIBILIDAD WHERE psicologo_id = ? AND dia = ? AND id <> ? AND hora_inicio < ? AND hora_fin > ?",
+            [psicologoId, dia, id, horaFin + ":00", horaInicio + ":00"]
+        );
+        if (cruces.length > 0) {
+            return res.status(409).json({ mensaje: "Esta ventana se cruza con otra que ya tienes ese día" });
+        }
+
+        await conexion.execute(
+            "UPDATE DISPONIBILIDAD SET dia = ?, hora_inicio = ?, hora_fin = ? WHERE id = ? AND psicologo_id = ?",
+            [dia, horaInicio + ":00", horaFin + ":00", id, psicologoId]
+        );
+        res.json({ mensaje: "Ventana actualizada" });
+    } catch (error) {
+        console.log("Error al actualizar la ventana:", error.message);
+        res.status(500).json({ mensaje: "No se pudo actualizar la ventana" });
+    }
+});
+
+// DELETE: elimina una ventana
+app.delete("/api/profesional/disponibilidad/:id", exigirRol("psicologo"), async function (req, res) {
+    const id = leerId(req.params.id);
+    if (!id) {
+        return res.status(400).json({ mensaje: "Ventana no válida" });
+    }
+
+    try {
+        const psicologoId = await obtenerPsicologoAprobado(req.session.usuario.id);
+        if (!psicologoId) {
+            return res.status(403).json({ mensaje: "Tu cuenta debe estar aprobada" });
+        }
+
+        const [resultado] = await conexion.execute(
+            "DELETE FROM DISPONIBILIDAD WHERE id = ? AND psicologo_id = ?",
+            [id, psicologoId]
+        );
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({ mensaje: "No se encontró esa ventana" });
+        }
+        res.json({ mensaje: "Ventana eliminada" });
+    } catch (error) {
+        console.log("Error al eliminar la ventana:", error.message);
+        res.status(500).json({ mensaje: "No se pudo eliminar la ventana" });
+    }
+});
+
 // -------------------------------------------------------------------------------------------------- Rutas del Administrador
 // PROVISIONAL: estas rutas todavía no verifican quién las llama; se protegen cuando existan las sesiones.
 
-// 1. Obtener todos los documentos pendientes de verificación
+// 1. trae los documentos pendientes de revisión subidos por el prfesional
 app.get("/api/admin/documentos-pendientes", async function (req, res) {
     try {
         const query = `
@@ -481,7 +764,7 @@ app.get("/api/admin/documentos-pendientes", async function (req, res) {
     }
 });
 
-// 2. Aprobar un documento y actualizar el estado del psicólogo
+// 2. aprobar los documentos y aprobar al profesional
 app.put("/api/admin/documentos/:id/aprobar", async function (req, res) {
     const documentoId = req.params.id;
     const cx = await conexion.getConnection();
@@ -531,7 +814,7 @@ app.put("/api/admin/documentos/:id/aprobar", async function (req, res) {
     }
 });
 
-// 3. Rechazar un documento
+// 3. rechazar los docuementos y rechazar al profesional
 app.put("/api/admin/documentos/:id/rechazar", async function (req, res) {
     const documentoId = req.params.id;
     const cx = await conexion.getConnection();

@@ -94,6 +94,143 @@ h1, h2 {
     color: #A32E3C;
 }
 
+/*---------------------------------------------------------------------- avisos según estado*/
+
+.oculto {
+    display: none !important;
+}
+
+.psicologo-aviso {
+    background-color: var(--color-blanco);
+    padding: 28px;
+    border-radius: 10px;
+    margin-top: 32px;
+    border-left: 4px solid var(--color-coral);
+}
+
+.psicologo-aviso.pendiente {
+    border-left-color: #8A6D00;
+}
+
+.psicologo-aviso.rechazado {
+    border-left-color: #A32E3C;
+}
+
+.psicologo-aviso h2 {
+    font-size: 1.2rem;
+    color: var(--color-verde);
+    margin-bottom: 10px;
+}
+
+/* ------------------------------------------------------------------ disponibilidad (CRUD)*/
+.disponibilidad-ayuda {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-bottom: 16px;
+}
+
+.disponibilidad-vacia {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 20px;
+}
+
+.disponibilidad-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+.disponibilidad-form .perfil-campo {
+    margin-bottom: 0;
+}
+
+.perfil-campo select {
+    padding: 10px 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background-color: var(--color-blanco);
+}
+
+.btn-agregar-ventana {
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-agregar-ventana:hover {
+    background-color: #1f3a2f;
+}
+
+/* ------------------------------------------------------------------ editar y eliminar ventanas */
+.disponibilidad-lista li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.disponibilidad-acciones {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-ventana-editar,
+.btn-ventana-eliminar {
+    background-color: transparent;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-ventana-editar {
+    border: 1.5px solid var(--color-verde);
+    color: var(--color-verde);
+}
+
+.btn-ventana-editar:hover {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+}
+
+.btn-ventana-eliminar {
+    border: 1.5px solid #A32E3C;
+    color: #A32E3C;
+}
+
+.btn-ventana-eliminar:hover {
+    background-color: #A32E3C;
+    color: var(--color-blanco);
+}
+
+.btn-cancelar-ventana {
+    background-color: transparent;
+    border: 1.5px solid #ccc;
+    color: var(--color-texto);
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-cancelar-ventana:hover {
+    background-color: #eee;
+}
+
 /*----------------------------------------------------------------------- perfil*/
 .psicologo-perfil {
     background-color: var(--color-blanco);
@@ -257,4 +394,46 @@ h1, h2 {
 .cita-estado.cancelada {
     background-color: #F8D7DA;
     color: #A32E3C;
+}
+
+/* ------------------------------------------------------- áreas de interées*/
+.perfil-areas-bloque {
+    margin-bottom: 20px;
+}
+
+.perfil-areas-titulo {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-verde);
+    margin-bottom: 8px;
+}
+
+.perfil-areas-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.perfil-area-opcion {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1.5px solid var(--color-verde);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-verde);
+    cursor: pointer;
+}
+
+.perfil-area-opcion input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.perfil-area-opcion:has(input:checked) {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
 }

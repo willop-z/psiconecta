@@ -18,79 +18,124 @@
 </div>
 </header>
 
-<section class="psicologo">
+<div class="psicologo">
     <h1>Bienvenido, <span class="nombre-usuario"></span></h1>
-    <span class="psicologo-estado aprobado">Cuenta verificada</span>
+    <span id="estado-cuenta" class="psicologo-estado"></span>
 
-    <div class="psicologo-perfil">
-    <h2>Tu perfil público</h2>
-    <form id="form-perfil">
-        <div class="perfil-campo">
-            <label for="anios-experiencia">Años de experiencia</label>
-            <input type="number" id="anios-experiencia" name="anios-experiencia" placeholder="Ingrese únicamente números" min="0">
+    <div id="aviso-pendiente" class="psicologo-aviso pendiente oculto">
+        <h2>Tu cuenta está en revisión</h2>
+        <p>Un administrador está revisando los documentos que cargaste. Cuando los apruebe, podrás completar tu perfil, definir tu disponibilidad y recibir citas.</p>
+    </div>
+
+    <div id="aviso-rechazado" class="psicologo-aviso rechazado oculto">
+        <h2>No pudimos verificar tus documentos</h2>
+        <p>Alguno de los documentos que cargaste no fue aprobado. Escríbenos a soportepsiconecta@gmail.com para revisar tu caso.</p>
+    </div>
+
+    <div id="panel-aprobado" class="oculto">
+        <div class="psicologo-perfil">
+        <h2>Tu perfil público</h2>
+            <form id="form-perfil">
+                <div class="perfil-campo">
+                    <label for="anios-experiencia">Años de experiencia</label>
+                    <input type="number" id="anios-experiencia" name="anios-experiencia" placeholder="Ingrese únicamente números" min="0">
+                </div>
+
+                <div class="perfil-campo">
+                    <label for="especialidad">Especialidad / Maestría</label>
+                    <input type="text" id="especialidad" name="especialidad" placeholder="Ej: Maestría en Terapia Cognitivo-Conductual" maxlength="150">
+                </div>
+
+                <div class="perfil-campo">
+                    <label for="biografia">Biografía breve</label>
+                    <textarea id="biografia" name="biografia" rows="4" placeholder="Cuéntale a los consultantes un poco sobre tu enfoque y forma de trabajo." maxlength="1000"></textarea>
+                </div>
+
+                <div class="perfil-areas-bloque">
+                    <p class="perfil-areas-titulo">Áreas de interés</p>
+                    <div id="lista-areas" class="perfil-areas-lista"></div>
+                </div>
+
+                <button type="submit" class="btn-guardar-perfil">Guardar cambios</button>
+            </form>
         </div>
 
-        <div class="perfil-campo">
-            <label for="especialidad">Especialidad / Maestría</label>
-            <input type="text" id="especialidad" name="especialidad" placeholder="Ej: Maestría en Terapia Cognitivo-Conductual">
+        <div class="psicologo-disponibilidad">
+            <h2>Tu disponibilidad</h2>
+            <p class="disponibilidad-ayuda">Cada cita reserva un bloque de 1 h 10 min. Define ventanas de horario y se dividen en bloques automáticamente.</p>
+
+            <ul id="lista-disponibilidad" class="disponibilidad-lista"></ul>
+            <p id="disponibilidad-vacia" class="disponibilidad-vacia oculto">Aún no has agregado horarios.</p>
+
+            <form id="form-disponibilidad" class="disponibilidad-form">
+                <div class="perfil-campo">
+                    <label for="disp-dia">Día</label>
+                    <select id="disp-dia" required>
+                        <option value="lunes">Lunes</option>
+                        <option value="martes">Martes</option>
+                        <option value="miercoles">Miércoles</option>
+                        <option value="jueves">Jueves</option>
+                        <option value="viernes">Viernes</option>
+                        <option value="sabado">Sábado</option>
+                        <option value="domingo">Domingo</option>
+                    </select>
+                </div>
+
+                <div class="perfil-campo">
+                    <label for="disp-inicio">Desde</label>
+                    <input type="time" id="disp-inicio" required>
+                </div>
+
+                <div class="perfil-campo">
+                    <label for="disp-fin">Hasta</label>
+                    <input type="time" id="disp-fin" required>
+                </div>
+
+                <button type="submit" id="btn-guardar-ventana" class="btn-agregar-ventana">Agregar</button>
+                <button type="button" id="btn-cancelar-edicion" class="btn-cancelar-ventana oculto">Cancelar</button>
+            </form>
         </div>
 
-        <div class="perfil-campo">
-            <label for="biografia">Biografía breve</label>
-            <textarea id="biografia" name="biografia" rows="4" placeholder="Cuéntale a los consultantes un poco sobre tu enfoque y forma de trabajo."></textarea>
+        <div class="psicologo-citas">
+            <h2>Tus próximas citas</h2>
+            <table class="citas-tabla">
+                <thead>
+                    <tr>
+                        <th>Consultante</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nicolás Bonilla</td>
+                        <td>26/10/2026</td>
+                        <td>8:00am</td>
+                        <td><span class="cita-estado confirmada">Confirmada</span></td>
+                    </tr>
+                    <tr>
+                        <td>Camilo Quiroga</td>
+                        <td>28/10/2026</td>
+                        <td>2:00pm</td>
+                        <td><span class="cita-estado pendiente">Pendiente</span></td>
+                    </tr>
+                    <tr>
+                        <td>Brayan Riveros</td>
+                        <td>02/11/2026</td>
+                        <td>11:00am</td>
+                        <td><span class="cita-estado cancelada">Cancelada</span></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
-        <button type="submit" class="btn-guardar-perfil">Guardar cambios</button>
-    </form>
+    </div>
 </div>
-
-    <div class="psicologo-disponibilidad">
-        <h2>Tu disponibilidad</h2>
-        <ul class="disponibilidad-lista">
-            <li>Lunes: 8:00am – 12:00pm</li>
-            <li>Miércoles: 2:00pm – 6:00pm</li>
-            <li>Viernes: 8:00am – 10:00am</li>
-        </ul>
-        <button class="btn-editar-disponibilidad">Editar disponibilidad</button>
-    </div>
-
-    <div class="psicologo-citas">
-        <h2>Tus próximas citas</h2>
-        <table class="citas-tabla">
-            <thead>
-                <tr>
-                    <th>Consultante</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Nicolás Bonilla</td>
-                    <td>26/10/2026</td>
-                    <td>8:00am</td>
-                    <td><span class="cita-estado confirmada">Confirmada</span></td>
-                </tr>
-                <tr>
-                    <td>Camilo Quiroga</td>
-                    <td>28/10/2026</td>
-                    <td>2:00pm</td>
-                    <td><span class="cita-estado pendiente">Pendiente</span></td>
-                </tr>
-                <tr>
-                    <td>Brayan Riveros</td>
-                    <td>02/11/2026</td>
-                    <td>11:00am</td>
-                    <td><span class="cita-estado cancelada">Cancelada</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 </section>
 
-<script src="js/script.js"></script>
 <script src="js/sesion.js"></script>
+<script src="js/pag-profesional.js"></script>
+<script src="js/disponibilidad.js"></script>
 
 </body>
 </html>
