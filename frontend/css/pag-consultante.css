@@ -120,6 +120,11 @@ h1, h3 {
 
 
 /*------------------------------------------------------------------------- filtros*/
+.busqueda-vacia {
+    font-size: 0.95rem;
+    opacity: 0.7;
+}
+
 .busqueda-filtros {
     display: flex;
     gap: 24px;

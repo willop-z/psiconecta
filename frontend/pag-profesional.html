@@ -98,7 +98,9 @@
 
         <div class="psicologo-citas">
             <h2>Tus próximas citas</h2>
-            <table class="citas-tabla">
+            <p id="citas-vacia" class="citas-vacia oculto">Aún no tienes citas.</p>
+
+            <table id="tabla-citas" class="citas-tabla oculto">
                 <thead>
                     <tr>
                         <th>Consultante</th>
@@ -107,26 +109,7 @@
                         <th>Estado</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Nicolás Bonilla</td>
-                        <td>26/10/2026</td>
-                        <td>8:00am</td>
-                        <td><span class="cita-estado confirmada">Confirmada</span></td>
-                    </tr>
-                    <tr>
-                        <td>Camilo Quiroga</td>
-                        <td>28/10/2026</td>
-                        <td>2:00pm</td>
-                        <td><span class="cita-estado pendiente">Pendiente</span></td>
-                    </tr>
-                    <tr>
-                        <td>Brayan Riveros</td>
-                        <td>02/11/2026</td>
-                        <td>11:00am</td>
-                        <td><span class="cita-estado cancelada">Cancelada</span></td>
-                    </tr>
-                </tbody>
+                <tbody id="citas-cuerpo"></tbody>
             </table>
         </div>
     </div>
@@ -136,6 +119,7 @@
 <script src="js/sesion.js"></script>
 <script src="js/pag-profesional.js"></script>
 <script src="js/disponibilidad.js"></script>
+<script src="js/citas-profesional.js"></script>
 
 </body>
 </html>

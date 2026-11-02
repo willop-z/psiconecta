@@ -1,118 +1,91 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Psiconecta — Buscar psicólogo</title>
-    <link rel="stylesheet" href="css/pag-consultante.css">
-</head>
-<body>
-
-<header class="header-simple">
-    <a href="index.html" class="logo">
+    <link rel="stylesheet" href="css/pag-consultante.css" />
+  </head>
+  <body>
+    <header class="header-simple">
+      <a href="index.html" class="logo">
         <span class="logo-texto">Psiconecta</span>
-    </a>
-    <div class="header-usuario">
-    <span class="header-saludo">Hola, <span class="nombre-usuario"></span></span>
-    <a href="index.html" class="btn-cerrar-sesion">Cerrar sesión</a>
-</div>
-</header>
+      </a>
+      <div class="header-usuario">
+        <span class="header-saludo"
+          >Hola, <span class="nombre-usuario"></span
+        ></span>
+        <a href="index.html" class="btn-cerrar-sesion">Cerrar sesión</a>
+      </div>
+    </header>
 
-<section class="consultante">
-    <div class="tabs">
-        <button class="tab-btn activo" data-tab="buscar">Buscar psicólogos</button>
+    <section class="consultante">
+      <div class="tabs">
+        <button class="tab-btn activo" data-tab="buscar">
+          Buscar psicólogos
+        </button>
         <button class="tab-btn" data-tab="historial">Mi historial</button>
-    </div>
+      </div>
 
-    <div id="tab-buscar" class="tab-panel">
+      <div id="tab-buscar" class="tab-panel">
         <h1>Encuentra un psicólogo</h1>
 
         <div class="busqueda-filtros">
-        <div class="filtro-campo">
+          <div class="filtro-campo">
             <label for="filtro-tipo">Tipo de profesional</label>
             <select id="filtro-tipo" name="filtro-tipo">
-                <option value="">Todos</option>
-                <option value="profesional">Profesional graduado</option>
-                <option value="practicante">Practicante en formación</option>
+              <option value="">Todos</option>
+              <option value="profesional">Profesional graduado</option>
+              <option value="practicante">Practicante en formación</option>
             </select>
-        </div>
+          </div>
 
-        <div class="filtro-campo">
+          <div class="filtro-campo">
             <label for="filtro-area">Área de interés</label>
             <select id="filtro-area" name="filtro-area">
-                <option value="">Todas</option>
+              <option value="">Todas</option>
             </select>
-        </div>
-    </div>
-
-    <div class="busqueda-resultados">
-        <div class="psicologo-card">
-            <h3>Wilmer García</h3>
-            <span class="psicologo-tipo">Profesional graduado</span>
-            <div class="psicologo-areas">
-                <span class="areas-item">Ansiedad</span>
-                <span class="areas-item">Autoestima</span>
-                <span class="areas-item">Duelo</span>
-            </div>
-            <a href="pag-perfil.html" class="btn-ver-perfil">Ver perfil</a>
+          </div>
         </div>
 
-        <div class="psicologo-card">
-            <h3>Karen Rodríguez</h3>
-            <span class="psicologo-tipo">Practicante en formación</span>
-            <div class="psicologo-areas">
-                <span class="areas-item">Relación de pareja</span>
-                <span class="areas-item">Familia</span>
-                <span class="areas-item">Sexualidad</span>
-            </div>
-            <a href="pag-perfil.html" class="btn-ver-perfil">Ver perfil</a>
-        </div>
+        <p id="busqueda-vacia" class="busqueda-vacia oculto">
+          No hay psicólogos que coincidan con esa búsqueda.
+        </p>
+        <div id="busqueda-resultados" class="busqueda-resultados"></div>
+      </div>
 
-        <div class="psicologo-card">
-            <h3>Pablo López</h3>
-            <span class="psicologo-tipo">Profesional graduado</span>
-            <div class="psicologo-areas">
-                <span class="areas-item">Depresión</span>
-                <span class="areas-item">Autoestima</span>
-                <span class="areas-item">Estrés académico o laboral</span>
-            </div>
-            <a href="pag-perfil.html" class="btn-ver-perfil">Ver perfil</a>
-        </div>
-    </div>
-    </div>
-
-    <div id="tab-historial" class="tab-panel oculto">
+      <div id="tab-historial" class="tab-panel oculto">
         <h1>Mi historial de encuentros</h1>
 
         <table class="historial-tabla">
-            <thead>
-                <tr>
-                    <th>Psicólogo</th>
-                    <th>Fecha</th>
-                    <th>Estado</th>
-                    <th>Calificación</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Laura Ramírez</td>
-                    <td>10/09/2026</td>
-                    <td><span class="cita-estado realizada">Realizada</span></td>
-                    <td>⭐⭐⭐⭐⭐</td>
-                </tr>
-                <tr>
-                    <td>Andrés Torres</td>
-                    <td>15/08/2026</td>
-                    <td><span class="cita-estado realizada">Realizada</span></td>
-                    <td>⭐⭐⭐⭐</td>
-                </tr>
-            </tbody>
+          <thead>
+            <tr>
+              <th>Psicólogo</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Calificación</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Laura Ramírez</td>
+              <td>10/09/2026</td>
+              <td><span class="cita-estado realizada">Realizada</span></td>
+              <td>⭐⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+              <td>Andrés Torres</td>
+              <td>15/08/2026</td>
+              <td><span class="cita-estado realizada">Realizada</span></td>
+              <td>⭐⭐⭐⭐</td>
+            </tr>
+          </tbody>
         </table>
-    </div>
-</section>
+      </div>
+    </section>
 
-<script src="js/pag-consultante.js"></script>
-<script src="js/sesion.js"></script>
-</body>
-
+    <script src="js/pag-consultante.js"></script>
+    <script src="js/sesion.js"></script>
+    <script src="js/busqueda.js"></script>
+  </body>
 </html>

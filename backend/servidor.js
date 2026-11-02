@@ -564,6 +564,243 @@ app.put("/api/profesional/perfil", exigirRol("psicologo"), async function (req, 
 const DIAS_VALIDOS = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
 const DURACION_MINIMA = 70; //----------------cada cita reserva un bloque de 1 h 10 min
 
+// ------------------------------------------------------- READ: citas del psicólogo desde hoy en adelante
+app.get("/api/profesional/citas", exigirRol("psicologo"), async function (req, res) {
+    try {
+        const psicologoId = await obtenerPsicologoAprobado(req.session.usuario.id);
+        if (!psicologoId) {
+            return res.status(403).json({ mensaje: "Tu cuenta debe estar aprobada" });
+        }
+
+        const [filas] = await conexion.execute(
+            `SELECT c.id, u.nombre AS consultante,
+                    DATE_FORMAT(c.fecha_hora, '%d/%m/%Y') AS fecha,
+                    DATE_FORMAT(c.fecha_hora, '%H:%i') AS hora,
+                    c.estado
+                FROM CITA c
+                JOIN CONSULTANTE co ON co.id = c.consultante_id
+                JOIN USUARIO u ON u.id = co.usuario_id
+                WHERE c.psicologo_id = ? AND c.fecha_hora >= CURDATE()
+                ORDER BY c.fecha_hora`,
+            [psicologoId]
+        );
+        res.json(filas);
+    } catch (error) {
+        console.log("Error al leer las citas:", error.message);
+        res.status(500).json({ mensaje: "No se pudieron cargar las citas" });
+    }
+});
+
+// ---------------------------------------------------------------Búsqueda de psicólogos para el consultante (solo aprobados, con filtros opcionales)
+app.get("/api/psicologos", exigirRol("consultante"), async function (req, res) {
+    const tipo = req.query.tipo || "";
+    const area = req.query.area ? Number(req.query.area) : null;
+
+    if (tipo && !["profesional", "practicante"].includes(tipo)) {
+        return res.status(400).json({ mensaje: "Tipo de profesional no válido" });
+    }
+    if (req.query.area && (!Number.isInteger(area) || area <= 0)) {
+        return res.status(400).json({ mensaje: "Área de interés no válida" });
+    }
+
+    // Las condiciones se van armando según los filtros que lleguen
+    const condiciones = ["p.estado_verificacion = 'aprobado'", "u.verificado = TRUE"];
+    const parametros = [];
+
+    if (tipo) {
+        condiciones.push("p.tipo = ?");
+        parametros.push(tipo);
+    }
+    if (area) {
+        condiciones.push("EXISTS (SELECT 1 FROM PSICOLOGO_AREA_INTERES f WHERE f.psicologo_id = p.id AND f.area_interes_id = ?)");
+        parametros.push(area);
+    }
+
+    try {
+        const [filas] = await conexion.execute(
+            `SELECT p.id, u.nombre, p.tipo,
+                    GROUP_CONCAT(a.nombre ORDER BY a.nombre SEPARATOR '||') AS areas
+                FROM PSICOLOGO p
+                JOIN USUARIO u ON u.id = p.usuario_id
+                LEFT JOIN PSICOLOGO_AREA_INTERES pa ON pa.psicologo_id = p.id
+                LEFT JOIN AREA_INTERES a ON a.id = pa.area_interes_id
+                WHERE ${condiciones.join(" AND ")}
+                GROUP BY p.id, u.nombre, p.tipo
+                ORDER BY u.nombre`,
+            parametros
+        );
+
+        res.json(filas.map(function (fila) {
+            return {
+                id: fila.id,
+                nombre: fila.nombre,
+                tipo: fila.tipo,
+                areas: fila.areas ? fila.areas.split("||") : []
+            };
+        }));
+    } catch (error) {
+        console.log("Error en la búsqueda de psicólogos:", error.message);
+        res.status(500).json({ mensaje: "No se pudo realizar la búsqueda" });
+    }
+});
+
+// --------------------------------------------------------------- Perfil de un psicólogo aprobado, para que lo vea el consultante
+app.get("/api/psicologos/:id", exigirRol("consultante"), async function (req, res) {
+    const id = leerId(req.params.id);
+    if (!id) {
+        return res.status(400).json({ mensaje: "Perfil no válido" });
+    }
+
+    try {
+        const [filas] = await conexion.execute(
+            `SELECT p.id, u.nombre, p.tipo,
+                    p.anios_experiencia AS aniosExperiencia, p.especialidad, p.biografia
+                FROM PSICOLOGO p
+                JOIN USUARIO u ON u.id = p.usuario_id
+                WHERE p.id = ? AND p.estado_verificacion = 'aprobado' AND u.verificado = TRUE`,
+            [id]
+        );
+        if (filas.length === 0) {
+            return res.status(404).json({ mensaje: "No encontramos este perfil" });
+        }
+
+        const [areas] = await conexion.execute(
+            `SELECT a.nombre
+                FROM PSICOLOGO_AREA_INTERES pa
+                JOIN AREA_INTERES a ON a.id = pa.area_interes_id
+                WHERE pa.psicologo_id = ?
+                ORDER BY a.nombre`,
+            [id]
+        );
+
+        const [horarios] = await conexion.execute(
+            `SELECT dia,
+                    TIME_FORMAT(hora_inicio, '%H:%i') AS horaInicio,
+                    TIME_FORMAT(hora_fin, '%H:%i') AS horaFin
+                FROM DISPONIBILIDAD
+                WHERE psicologo_id = ?
+                ORDER BY FIELD(dia, 'lunes','martes','miercoles','jueves','viernes','sabado','domingo'), hora_inicio`,
+            [id]
+        );
+
+        res.json({
+            ...filas[0],
+            areas: areas.map(function (fila) { return fila.nombre; }),
+            horarios: horarios
+        });
+    } catch (error) {
+        console.log("Error al leer el perfil del psicólogo:", error.message);
+        res.status(500).json({ mensaje: "No se pudo cargar el perfil" });
+    }
+});
+
+// --------------------------------------------------------------------------------- AGENDAMIENTO DE CITAS
+const DURACION_CITA = 70;      // minutos que reserva cada cita
+const DIAS_ANTICIPACION = 30;  // hasta cuántos días adelante se puede agendar
+const NOMBRES_DIAS_SEMANA = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+
+// Convierte "AAAA-MM-DD" en una fecha a las 00:00 (hora local); devuelve null si no es una fecha real
+function leerFecha(texto) {
+    if (typeof texto !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(texto)) return null;
+    const [anio, mes, dia] = texto.split("-").map(Number);
+    const fecha = new Date(anio, mes - 1, dia);
+    // JavaScript "corrige" fechas inventadas como 2026-02-31 en vez de fallar, así que se comprueba
+    if (fecha.getFullYear() !== anio || fecha.getMonth() !== mes - 1 || fecha.getDate() !== dia) return null;
+    return fecha;
+}
+
+// Convierte minutos desde medianoche en "HH:MM" (510 pasa a "08:30")
+function aHora(minutos) {
+    const hh = String(Math.floor(minutos / 60)).padStart(2, "0");
+    const mm = String(minutos % 60).padStart(2, "0");
+    return hh + ":" + mm;
+}
+
+// Calcula los horarios libres de un psicólogo en una fecha; devuelve una lista de "HH:MM"
+async function calcularHorariosLibres(cx, psicologoId, fechaTexto, fecha) {
+    const dia = NOMBRES_DIAS_SEMANA[fecha.getDay()];
+
+    // 1. Las ventanas que el psicólogo definió para ese día de la semana
+    const [ventanas] = await cx.execute(
+        `SELECT TIME_FORMAT(hora_inicio, '%H:%i') AS horaInicio,
+                TIME_FORMAT(hora_fin, '%H:%i') AS horaFin
+            FROM DISPONIBILIDAD
+            WHERE psicologo_id = ? AND dia = ?
+            ORDER BY hora_inicio`,
+        [psicologoId, dia]
+    );
+    if (ventanas.length === 0) return [];
+
+    // 2. Las citas que ya ocupan tiempo ese día (las canceladas liberan el horario)
+    const [ocupadas] = await cx.execute(
+        `SELECT TIME_FORMAT(fecha_hora, '%H:%i') AS hora, duracion_minutos AS duracion
+            FROM CITA
+            WHERE psicologo_id = ? AND DATE(fecha_hora) = ? AND estado <> 'cancelada'`,
+        [psicologoId, fechaTexto]
+    );
+    const bloqueos = ocupadas.map(function (cita) {
+        return { inicio: aMinutos(cita.hora), fin: aMinutos(cita.hora) + cita.duracion };
+    });
+
+    // 3. Si la fecha es hoy, no se ofrecen horas que ya pasaron
+    const ahora = new Date();
+    const esHoy = fecha.toDateString() === ahora.toDateString();
+    const minutosAhora = ahora.getHours() * 60 + ahora.getMinutes();
+
+    // 4. Cada ventana se parte en bloques de 70 minutos, y se descartan los que chocan con una cita
+    const libres = [];
+    for (const ventana of ventanas) {
+        const finVentana = aMinutos(ventana.horaFin);
+        for (let inicio = aMinutos(ventana.horaInicio); inicio + DURACION_CITA <= finVentana; inicio += DURACION_CITA) {
+            const fin = inicio + DURACION_CITA;
+            if (esHoy && inicio <= minutosAhora) continue;
+
+            const chocaConUnaCita = bloqueos.some(function (bloqueo) {
+                return inicio < bloqueo.fin && fin > bloqueo.inicio;
+            });
+            if (!chocaConUnaCita) libres.push(aHora(inicio));
+        }
+    }
+    return libres;
+}
+
+// Horarios libres de un psicólogo en una fecha (?fecha=AAAA-MM-DD)
+app.get("/api/psicologos/:id/horarios", exigirRol("consultante"), async function (req, res) {
+    const id = leerId(req.params.id);
+    const fecha = leerFecha(req.query.fecha);
+    if (!id || !fecha) {
+        return res.status(400).json({ mensaje: "Datos no válidos" });
+    }
+
+    // Solo se puede agendar desde hoy hasta DIAS_ANTICIPACION días adelante
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const limite = new Date(hoy);
+    limite.setDate(limite.getDate() + DIAS_ANTICIPACION);
+    if (fecha < hoy || fecha > limite) {
+        return res.status(400).json({ mensaje: "Elige una fecha entre hoy y los próximos " + DIAS_ANTICIPACION + " días" });
+    }
+
+    try {
+        // El psicólogo debe estar aprobado y con el correo verificado
+        const [psicologos] = await conexion.execute(
+            `SELECT p.id FROM PSICOLOGO p
+                JOIN USUARIO u ON u.id = p.usuario_id
+                WHERE p.id = ? AND p.estado_verificacion = 'aprobado' AND u.verificado = TRUE`,
+            [id]
+        );
+        if (psicologos.length === 0) {
+            return res.status(404).json({ mensaje: "No encontramos este perfil" });
+        }
+
+        const horarios = await calcularHorariosLibres(conexion, id, req.query.fecha, fecha);
+        res.json(horarios);
+    } catch (error) {
+        console.log("Error al calcular los horarios:", error.message);
+        res.status(500).json({ mensaje: "No se pudieron cargar los horarios" });
+    }
+});
+
 // Convierte "08:30" en minutos desde medianoche (510)
 function aMinutos(hora) {
     const partes = hora.split(":").map(Number);

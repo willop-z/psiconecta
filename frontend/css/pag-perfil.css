@@ -1,0 +1,238 @@
+/* ===== Variables de color ===== */
+:root {
+    --color-verde: #2D4A3E;
+    --color-beige: #F5F1E8;
+    --color-texto: #1A1A1A;
+    --color-coral: #E8846B;
+    --color-blanco: #FFFFFF;
+}
+
+/* ===== Reset básico ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Verdana, Arial, sans-serif;
+    color: var(--color-texto);
+    background-color: var(--color-beige);
+    line-height: 1.6;
+}
+
+h1, h2 {
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.2;
+}
+
+.logo-texto {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-verde);
+}
+
+.oculto {
+    display: none !important;
+}
+
+/* ===== Header ===== */
+.header-simple {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: var(--color-blanco);
+}
+
+.header-simple .logo {
+    text-decoration: none;
+}
+
+.btn-cerrar-sesion {
+    text-decoration: none;
+    color: var(--color-verde);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.header-usuario {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-saludo {
+    font-size: 0.9rem;
+    color: var(--color-verde);
+    opacity: 0.8;
+}
+
+.header-saludo .nombre-usuario {
+    font-weight: 600;
+}
+
+/* ===== Perfil ===== */
+.perfil {
+    padding: 48px 40px;
+    max-width: 800px;
+}
+
+.perfil-volver {
+    display: inline-block;
+    margin-bottom: 24px;
+    text-decoration: none;
+    color: var(--color-verde);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.perfil-error {
+    font-size: 0.95rem;
+    opacity: 0.8;
+}
+
+.perfil-info,
+.perfil-detalle,
+.perfil-disponibilidad {
+    background-color: var(--color-blanco);
+    padding: 28px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+}
+
+.perfil-info h1 {
+    font-size: 1.8rem;
+    color: var(--color-verde);
+    margin-bottom: 4px;
+}
+
+.perfil-tipo {
+    display: block;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-bottom: 14px;
+}
+
+.perfil-areas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.perfil-areas .areas-item {
+    padding: 5px 12px;
+    border-radius: 20px;
+    background-color: var(--color-beige);
+    color: var(--color-verde);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1.5px solid var(--color-verde);
+}
+
+.perfil-detalle p {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+}
+
+.perfil-detalle h2,
+.perfil-disponibilidad h2 {
+    font-size: 1.2rem;
+    color: var(--color-verde);
+    margin-bottom: 12px;
+}
+
+.perfil-biografia {
+    white-space: pre-line;
+}
+
+.disponibilidad-lista {
+    list-style: none;
+}
+
+.disponibilidad-lista li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95rem;
+}
+
+.disponibilidad-lista li:last-child {
+    border-bottom: none;
+}
+
+.perfil-sin-horarios {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+/* ------------------------------------------------------ PARA AGENDAR */
+.perfil-agendar {
+    background-color: var(--color-blanco);
+    padding: 28px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+}
+
+.perfil-agendar h2 {
+    font-size: 1.2rem;
+    color: var(--color-verde);
+    margin-bottom: 8px;
+}
+
+.perfil-agendar-ayuda {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-bottom: 16px;
+}
+
+.perfil-campo-fecha {
+    display: flex;
+    flex-direction: column;
+    max-width: 220px;
+    margin-bottom: 16px;
+}
+
+.perfil-campo-fecha label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-verde);
+    margin-bottom: 6px;
+}
+
+.perfil-campo-fecha input {
+    padding: 10px 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.agenda-mensaje {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 12px;
+}
+
+.agenda-horarios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.btn-horario {
+    padding: 10px 18px;
+    border: 1.5px solid var(--color-verde);
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--color-verde);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-horario:hover {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+}

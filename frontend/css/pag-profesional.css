@@ -396,6 +396,21 @@ h1, h2 {
     color: #A32E3C;
 }
 
+.citas-vacia {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.cita-estado.realizada {
+    background-color: #D4EDDA;
+    color: #1E7A34;
+}
+
+.cita-estado.cancelada {
+    background-color: #F8D7DA;
+    color: #A32E3C;
+}
+
 /* ------------------------------------------------------- áreas de interées*/
 .perfil-areas-bloque {
     margin-bottom: 20px;

@@ -1,43 +1,76 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Psiconecta — Perfil del psicólogo</title>
-    <link rel="stylesheet" href="css/pag-perfil.css">
-</head>
-<body>
-
-<header class="header-simple">
-    <a href="index.html" class="logo">
+    <link rel="stylesheet" href="css/pag-perfil.css" />
+  </head>
+  <body>
+    <header class="header-simple">
+      <a href="index.html" class="logo">
         <span class="logo-texto">Psiconecta</span>
-    </a>
-    <a href="index.html" class="btn-cerrar-sesion">Cerrar sesión</a>
-</header>
+      </a>
+      <div class="header-usuario">
+        <span class="header-saludo"
+          >Hola, <span class="nombre-usuario"></span
+        ></span>
+        <a href="index.html" class="btn-cerrar-sesion">Cerrar sesión</a>
+      </div>
+    </header>
 
-<section class="perfil">
-    <a href="pag-consultante.html" class="perfil-volver">← Volver a resultados</a>
+    <section class="perfil">
+      <a href="pag-consultante.html" class="perfil-volver"
+        >← Volver a resultados</a
+      >
 
-    <div class="perfil-info">
-        <h1>Laura Ramírez</h1>
-        <span class="perfil-tipo">Profesional graduado</span>
+      <p id="perfil-error" class="perfil-error oculto">
+        No encontramos este perfil.
+      </p>
 
-        <div class="perfil-areas">
-            <span class="areas-item">Ansiedad</span>
-            <span class="areas-item">Autoestima</span>
+      <div id="perfil-contenido" class="oculto">
+        <div class="perfil-info">
+          <h1 id="perfil-nombre"></h1>
+          <span id="perfil-tipo" class="perfil-tipo"></span>
+          <div id="perfil-areas" class="perfil-areas"></div>
         </div>
-    </div>
 
-    <div class="perfil-disponibilidad">
-        <h2>Disponibilidad</h2>
-        <ul class="disponibilidad-lista">
-            <li>Lunes: 8:00am – 12:00pm</li>
-            <li>Miércoles: 2:00pm – 6:00pm</li>
-            <li>Viernes: 8:00am – 10:00am</li>
-        </ul>
-    </div>
-</section>
+        <div id="perfil-detalle" class="perfil-detalle oculto">
+          <p id="perfil-experiencia" class="oculto"></p>
+          <p id="perfil-especialidad" class="oculto"></p>
+          <div id="perfil-biografia-bloque" class="oculto">
+            <h2>Sobre mí</h2>
+            <p id="perfil-biografia" class="perfil-biografia"></p>
+          </div>
+        </div>
 
-</body>
-<script src="js/script.js"></script>
+        <div class="perfil-disponibilidad">
+          <h2>Disponibilidad</h2>
+          <ul id="perfil-horarios" class="disponibilidad-lista"></ul>
+          <p id="perfil-sin-horarios" class="perfil-sin-horarios oculto">
+            Este profesional aún no ha definido horarios.
+          </p>
+        </div>
+
+        <div class="perfil-agendar">
+          <h2>Agendar una cita</h2>
+          <p class="perfil-agendar-ayuda">
+            Cada cita reserva un bloque de 1 h 10 min. Elige una fecha para ver
+            los horarios libres.
+          </p>
+
+          <div class="perfil-campo-fecha">
+            <label for="agenda-fecha">Fecha</label>
+            <input type="date" id="agenda-fecha" />
+          </div>
+
+          <p id="agenda-mensaje" class="agenda-mensaje oculto"></p>
+          <div id="agenda-horarios" class="agenda-horarios"></div>
+        </div>
+      </div>
+    </section>
+
+    <script src="js/sesion.js"></script>
+    <script src="js/pag-perfil.js"></script>
+  </body>
 </html>
