@@ -236,3 +236,96 @@ h1, h2 {
     background-color: var(--color-verde);
     color: var(--color-blanco);
 }
+
+/* ===== Confirmar la cita y formulario de admisión ===== */
+.agenda-confirmar {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.agenda-confirmar h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    color: var(--color-verde);
+    margin-bottom: 8px;
+}
+
+.agenda-resumen {
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+}
+
+.agenda-admision {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.agenda-admision label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-verde);
+    margin-bottom: 4px;
+}
+
+.agenda-admision-ayuda {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-bottom: 8px;
+}
+
+.agenda-admision textarea {
+    padding: 10px 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.agenda-admision textarea:focus {
+    outline: none;
+    border-color: var(--color-verde);
+}
+
+.agenda-confirmar-botones {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-confirmar-cita {
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-confirmar-cita:hover {
+    background-color: #1f3a2f;
+}
+
+.btn-confirmar-cita:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-cancelar-reserva {
+    background-color: transparent;
+    border: 1.5px solid #ccc;
+    color: var(--color-texto);
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-cancelar-reserva:hover {
+    background-color: #eee;
+}

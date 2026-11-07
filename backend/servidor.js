@@ -682,11 +682,20 @@ app.get("/api/psicologos/:id", exigirRol("consultante"), async function (req, re
                 ORDER BY FIELD(dia, 'lunes','martes','miercoles','jueves','viernes','sabado','domingo'), hora_inicio`,
             [id]
         );
+                // ¿Este consultante ya llenó el formulario de admisión con este psicólogo?
+        const [admision] = await conexion.execute(
+            `SELECT f.id
+                FROM FORMULARIO_ADMISION f
+                JOIN CONSULTANTE co ON co.id = f.consultante_id
+                WHERE co.usuario_id = ? AND f.psicologo_id = ?`,
+            [req.session.usuario.id, id]
+        );
 
         res.json({
             ...filas[0],
             areas: areas.map(function (fila) { return fila.nombre; }),
-            horarios: horarios
+            horarios: horarios,
+            requiereAdmision: admision.length === 0
         });
     } catch (error) {
         console.log("Error al leer el perfil del psicólogo:", error.message);
@@ -696,6 +705,8 @@ app.get("/api/psicologos/:id", exigirRol("consultante"), async function (req, re
 
 // --------------------------------------------------------------------------------- AGENDAMIENTO DE CITAS
 const DURACION_CITA = 70;      // minutos que reserva cada cita
+const PASO_CITAS = 90;         // cada cuántos minutos puede empezar una cita (6:00, 7:30, 9:00...)
+const ESTADO_CITA_NUEVA = "confirmada"; // estado con el que nace una cita al agendarla
 const DIAS_ANTICIPACION = 30;  // hasta cuántos días adelante se puede agendar
 const NOMBRES_DIAS_SEMANA = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 
@@ -714,6 +725,19 @@ function aHora(minutos) {
     const hh = String(Math.floor(minutos / 60)).padStart(2, "0");
     const mm = String(minutos % 60).padStart(2, "0");
     return hh + ":" + mm;
+}
+
+// Horas de inicio posibles dentro de una ventana, en minutos desde medianoche.
+// La primera es el primer punto o media hora de la ventana, y las demás avanzan cada PASO_CITAS minutos.
+// Cada cita debe terminar (inicio + 70 min) dentro de la ventana.
+function iniciosDeVentana(horaInicio, horaFin) {
+    const finVentana = aMinutos(horaFin);
+    const primero = Math.ceil(aMinutos(horaInicio) / 30) * 30;
+    const inicios = [];
+    for (let inicio = primero; inicio + DURACION_CITA <= finVentana; inicio += PASO_CITAS) {
+        inicios.push(inicio);
+    }
+    return inicios;
 }
 
 // Calcula los horarios libres de un psicólogo en una fecha; devuelve una lista de "HH:MM"
@@ -747,11 +771,10 @@ async function calcularHorariosLibres(cx, psicologoId, fechaTexto, fecha) {
     const esHoy = fecha.toDateString() === ahora.toDateString();
     const minutosAhora = ahora.getHours() * 60 + ahora.getMinutes();
 
-    // 4. Cada ventana se parte en bloques de 70 minutos, y se descartan los que chocan con una cita
+    // 4. Cada ventana se parte en horarios cada 90 minutos, y se descartan los que chocan con una cita
     const libres = [];
     for (const ventana of ventanas) {
-        const finVentana = aMinutos(ventana.horaFin);
-        for (let inicio = aMinutos(ventana.horaInicio); inicio + DURACION_CITA <= finVentana; inicio += DURACION_CITA) {
+        for (const inicio of iniciosDeVentana(ventana.horaInicio, ventana.horaFin)) {
             const fin = inicio + DURACION_CITA;
             if (esHoy && inicio <= minutosAhora) continue;
 
@@ -798,6 +821,123 @@ app.get("/api/psicologos/:id/horarios", exigirRol("consultante"), async function
     } catch (error) {
         console.log("Error al calcular los horarios:", error.message);
         res.status(500).json({ mensaje: "No se pudieron cargar los horarios" });
+    }
+});
+
+// Reservar un horario: crea la cita
+app.post("/api/psicologos/:id/citas", exigirRol("consultante"), async function (req, res) {
+    const psicologoId = leerId(req.params.id);
+    const { fecha: fechaTexto, hora } = req.body;
+    const fecha = leerFecha(fechaTexto);
+
+    if (!psicologoId || !fecha || typeof hora !== "string" || !/^([01]\d|2[0-3]):[0-5]\d$/.test(hora)) {
+        return res.status(400).json({ mensaje: "Datos no válidos" });
+    }
+
+    // La fecha debe estar entre hoy y los próximos DIAS_ANTICIPACION días
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const limite = new Date(hoy);
+    limite.setDate(limite.getDate() + DIAS_ANTICIPACION);
+    if (fecha < hoy || fecha > limite) {
+        return res.status(400).json({ mensaje: "Elige una fecha entre hoy y los próximos " + DIAS_ANTICIPACION + " días" });
+    }
+
+    const cx = await conexion.getConnection();
+    try {
+        // Dentro de la transacción, cada lectura ve lo último que se confirmó
+        await cx.query("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
+        await cx.beginTransaction();
+
+        // 1. Se bloquea la fila del psicólogo: si otra persona reserva con él al mismo tiempo, espera su turno
+        const [psicologos] = await cx.execute(
+            "SELECT id, usuario_id, estado_verificacion FROM PSICOLOGO WHERE id = ? FOR UPDATE",
+            [psicologoId]
+        );
+        let disponible = psicologos.length > 0 && psicologos[0].estado_verificacion === "aprobado";
+        if (disponible) {
+            const [usuarios] = await cx.execute(
+                "SELECT verificado FROM USUARIO WHERE id = ?",
+                [psicologos[0].usuario_id]
+            );
+            disponible = usuarios.length > 0 && Boolean(usuarios[0].verificado);
+        }
+        if (!disponible) {
+            await cx.rollback();
+            return res.status(404).json({ mensaje: "No encontramos este perfil" });
+        }
+
+        // 2. El consultante que tiene la sesión
+        const [consultantes] = await cx.execute(
+            "SELECT id FROM CONSULTANTE WHERE usuario_id = ?",
+            [req.session.usuario.id]
+        );
+        if (consultantes.length === 0) {
+            await cx.rollback();
+            return res.status(403).json({ mensaje: "No se encontró tu cuenta de consultante" });
+        }
+        const consultanteId = consultantes[0].id;
+
+        // 3. El horario debe seguir libre (se recalcula con las mismas reglas de la búsqueda)
+        const libres = await calcularHorariosLibres(cx, psicologoId, fechaTexto, fecha);
+        if (!libres.includes(hora)) {
+            await cx.rollback();
+            return res.status(409).json({ mensaje: "Ese horario ya no está disponible. Elige otro." });
+        }
+
+        // 4. El consultante no puede tener otra cita que se cruce con este horario
+        const [propias] = await cx.execute(
+            `SELECT TIME_FORMAT(fecha_hora, '%H:%i') AS hora, duracion_minutos AS duracion
+                FROM CITA
+                WHERE consultante_id = ? AND DATE(fecha_hora) = ? AND estado <> 'cancelada'`,
+            [consultanteId, fechaTexto]
+        );
+        const inicioNuevo = aMinutos(hora);
+        const finNuevo = inicioNuevo + DURACION_CITA;
+        const tieneCruce = propias.some(function (cita) {
+            const inicioCita = aMinutos(cita.hora);
+            return inicioNuevo < inicioCita + cita.duracion && finNuevo > inicioCita;
+        });
+        if (tieneCruce) {
+            await cx.rollback();
+            return res.status(409).json({ mensaje: "Ya tienes otra cita que se cruza con ese horario" });
+        }
+
+        // 5. Formulario de admisión: se exige solo en la primera cita con este psicólogo
+        const [formularios] = await cx.execute(
+            "SELECT id FROM FORMULARIO_ADMISION WHERE consultante_id = ? AND psicologo_id = ?",
+            [consultanteId, psicologoId]
+        );
+        if (formularios.length === 0) {
+            const motivo = typeof req.body.motivo === "string" ? req.body.motivo.trim() : "";
+            if (motivo.length === 0) {
+                await cx.rollback();
+                return res.status(400).json({ mensaje: "Cuéntanos brevemente el motivo de tu consulta para agendar tu primera cita con este profesional" });
+            }
+            if (motivo.length > 1000) {
+                await cx.rollback();
+                return res.status(400).json({ mensaje: "El motivo de consulta puede tener máximo 1000 caracteres" });
+            }
+            await cx.execute(
+                "INSERT INTO FORMULARIO_ADMISION (consultante_id, psicologo_id, motivo_consulta) VALUES (?, ?, ?)",
+                [consultanteId, psicologoId, motivo]
+            );
+        }        
+
+        // 6. Se crea la cita
+        const [resultado] = await cx.execute(
+            "INSERT INTO CITA (psicologo_id, consultante_id, fecha_hora, duracion_minutos, estado) VALUES (?, ?, ?, ?, ?)",
+            [psicologoId, consultanteId, fechaTexto + " " + hora + ":00", DURACION_CITA, ESTADO_CITA_NUEVA]
+        );
+
+        await cx.commit();
+        res.status(201).json({ mensaje: "Cita agendada", id: resultado.insertId });
+    } catch (error) {
+        await cx.rollback();
+        console.log("Error al agendar la cita:", error.message);
+        res.status(500).json({ mensaje: "No se pudo agendar la cita" });
+    } finally {
+        cx.release();
     }
 });
 
@@ -849,7 +989,12 @@ app.get("/api/profesional/disponibilidad", exigirRol("psicologo"), async functio
                 ORDER BY FIELD(dia, 'lunes','martes','miercoles','jueves','viernes','sabado','domingo'), hora_inicio`,
             [psicologoId]
         );
-        res.json(filas);
+        res.json(filas.map(function (ventana) {
+            return {
+                ...ventana,
+                cupos: iniciosDeVentana(ventana.horaInicio, ventana.horaFin).length
+            };
+        }));
     } catch (error) {
         console.log("Error al leer la disponibilidad:", error.message);
         res.status(500).json({ mensaje: "No se pudo cargar la disponibilidad" });

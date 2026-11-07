@@ -48,6 +48,8 @@ async function cargarPerfil() {
         }
         const perfil = await respuesta.json();
 
+        requiereAdmision = perfil.requiereAdmision;
+
         nombrePerfil.textContent = perfil.nombre;
         tipoPerfil.textContent = TEXTOS_TIPO[perfil.tipo];
 
@@ -123,7 +125,10 @@ function mostrarMensajeAgenda(texto) {
 async function cargarHorarios() {
     contenedorHorarios.innerHTML = '';
     mensajeAgenda.classList.add('oculto');
+    ocultarConfirmacion();
     if (!inputFecha.value) return;
+
+    const fechaElegida = inputFecha.value;
 
     try {
         const respuesta = await fetch(
@@ -145,6 +150,10 @@ async function cargarHorarios() {
             boton.type = 'button';
             boton.className = 'btn-horario';
             boton.textContent = hora;
+
+            boton.addEventListener('click', function() {
+                abrirConfirmacion(fechaElegida, hora);
+            });
             contenedorHorarios.appendChild(boton);
         });
     } catch (error) {
@@ -153,5 +162,71 @@ async function cargarHorarios() {
 }
 
 inputFecha.addEventListener('change', cargarHorarios);
+
+// ---------------------------------------------------------------------------- Agendar: confirmar y reservar
+const panelConfirmar = document.getElementById('agenda-confirmar');
+const resumenCita = document.getElementById('agenda-resumen');
+const bloqueAdmision = document.getElementById('agenda-admision');
+const inputMotivo = document.getElementById('admision-motivo');
+const botonConfirmar = document.getElementById('btn-confirmar-cita');
+const botonCancelarReserva = document.getElementById('btn-cancelar-reserva');
+
+let citaElegida = null;        // { fecha, hora } del horario que se está confirmando
+let requiereAdmision = false;  // lo dice el servidor al cargar el perfil
+
+function formatoFecha(texto) {
+    return texto.split('-').reverse().join('/');
+}
+
+function ocultarConfirmacion() {
+    citaElegida = null;
+    panelConfirmar.classList.add('oculto');
+}
+
+function abrirConfirmacion(fecha, hora) {
+    citaElegida = { fecha: fecha, hora: hora };
+    resumenCita.textContent = 'Cita con ' + nombrePerfil.textContent +
+        ' el ' + formatoFecha(fecha) + ' a las ' + hora + '.';
+    bloqueAdmision.classList.toggle('oculto', !requiereAdmision);
+    panelConfirmar.classList.remove('oculto');
+    if (requiereAdmision) inputMotivo.focus();
+}
+
+async function reservarHorario() {
+    if (!citaElegida) return;
+
+    const motivo = inputMotivo.value.trim();
+    if (requiereAdmision && motivo === '') {
+        alert('Cuéntanos brevemente el motivo de tu consulta para poder agendar.');
+        inputMotivo.focus();
+        return;
+    }
+
+    botonConfirmar.disabled = true;  // evita enviar dos veces con un doble clic
+    try {
+        const respuesta = await fetch('/api/psicologos/' + encodeURIComponent(idPsicologo) + '/citas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fecha: citaElegida.fecha, hora: citaElegida.hora, motivo: motivo })
+        });
+        const resultado = await respuesta.json();
+        alert(resultado.mensaje);
+
+        if (respuesta.ok) {
+            requiereAdmision = false;  // el formulario ya quedó guardado
+            inputMotivo.value = '';
+        }
+    } catch (error) {
+        alert('No se pudo conectar con el servidor');
+    } finally {
+        botonConfirmar.disabled = false;
+    }
+
+    // Se vuelve a pedir la lista: el horario reservado ya no debe aparecer
+    cargarHorarios();
+}
+
+botonConfirmar.addEventListener('click', reservarHorario);
+botonCancelarReserva.addEventListener('click', ocultarConfirmacion);
 
 cargarPerfil();

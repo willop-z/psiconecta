@@ -66,6 +66,43 @@
 
           <p id="agenda-mensaje" class="agenda-mensaje oculto"></p>
           <div id="agenda-horarios" class="agenda-horarios"></div>
+
+          <div id="agenda-confirmar" class="agenda-confirmar oculto">
+            <h3>Confirma tu cita</h3>
+            <p id="agenda-resumen" class="agenda-resumen"></p>
+
+            <div id="agenda-admision" class="agenda-admision oculto">
+              <label for="admision-motivo">Motivo de consulta</label>
+              <p class="agenda-admision-ayuda">
+                Te lo pedimos solo en tu primera cita con este profesional y se
+                comparte únicamente con él. Cuéntale, en términos generales, qué
+                te gustaría trabajar.
+              </p>
+              <textarea
+                id="admision-motivo"
+                rows="4"
+                maxlength="1000"
+                placeholder="Ej: Últimamente me siento ansioso por el trabajo y quisiera aprender a manejarlo."
+              ></textarea>
+            </div>
+
+            <div class="agenda-confirmar-botones">
+              <button
+                type="button"
+                id="btn-confirmar-cita"
+                class="btn-confirmar-cita"
+              >
+                Confirmar cita
+              </button>
+              <button
+                type="button"
+                id="btn-cancelar-reserva"
+                class="btn-cancelar-reserva"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

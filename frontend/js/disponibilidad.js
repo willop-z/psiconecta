@@ -20,14 +20,6 @@ const NOMBRES_DIA = {
     domingo: 'Domingo'
 };
 
-// Cuántas citas de 70 minutos caben en una ventana
-function citasQueCaben(horaInicio, horaFin) {
-    const aMinutos = function(hora) {
-        const partes = hora.split(':').map(Number);
-        return partes[0] * 60 + partes[1];
-    };
-    return Math.floor((aMinutos(horaFin) - aMinutos(horaInicio)) / 70);
-}
 
 function volverAModoAgregar() {
     ventanaEnEdicion = null;
@@ -84,7 +76,7 @@ async function cargarDisponibilidad() {
         mensajeVacio.classList.toggle('oculto', ventanas.length > 0);
 
         ventanas.forEach(function(ventana) {
-            const cupos = citasQueCaben(ventana.horaInicio, ventana.horaFin);
+            const cupos = ventana.cupos;
 
             const item = document.createElement('li');
 
