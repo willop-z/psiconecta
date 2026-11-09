@@ -31,6 +31,10 @@ h1, h2, h3 {
     align-items: center;
     padding: 20px 40px;
     background-color: var(--color-blanco);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .logo-texto {
@@ -43,6 +47,7 @@ h1, h2, h3 {
 .botones-usuario {
     display: flex;
     gap: 16px;
+    align-items: center;
 }
 
 .btn-consultante,
@@ -52,7 +57,7 @@ h1, h2, h3 {
     border-radius: 6px;
     font-size: 0.95rem;
     font-weight: 600;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .btn-login {
@@ -77,6 +82,7 @@ h1, h2, h3 {
 .btn-consultante:hover {
     background-color: var(--color-verde);
     color: var(--color-blanco);
+    transform: translateY(-2px);
 }
 
 .btn-profesional {
@@ -87,12 +93,15 @@ h1, h2, h3 {
 
 .btn-profesional:hover {
     background-color: #d1734f;
+    transform: translateY(-2px);
 }
 
 /*----------------------------------------------------------------- presentacion*/
 .presentacion {
     padding: 80px 40px;
-    max-width: 700px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .presentacion-titulo h1 {
@@ -105,6 +114,9 @@ h1, h2, h3 {
     font-size: 1.1rem;
     color: var(--color-texto);
     margin-bottom: 32px;
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .btn-buscar-psico {
@@ -116,11 +128,14 @@ h1, h2, h3 {
     color: var(--color-blanco);
     font-weight: 600;
     font-size: 1.05rem;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(45, 74, 62, 0.25);
 }
 
 .btn-buscar-psico:hover {
     background-color: #1f3a2f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(45, 74, 62, 0.35);
 }
 
 /*----------------------------------------------------------------- datos*/
@@ -136,8 +151,11 @@ h1, h2, h3 {
 .datos-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     color: var(--color-blanco);
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 12px 24px;
+    border-radius: 8px;
 }
 
 .datos-icono {
@@ -172,6 +190,10 @@ h1, h2, h3 {
 .funcion-paso {
     text-align: center;
 }
+.funcion-paso:hover,
+.funcion-verificacion:hover {
+    transform: translateY(-5px);
+}
 
 .paso {
     display: inline-flex;
@@ -194,19 +216,21 @@ h1, h2, h3 {
 
 .funcion-paso p {
     font-size: 0.95rem;
+    color: #4a4a4a;
 }
 
 .funcion-verificacion {
-    max-width: 700px;
+    max-width: 800px;
     margin: 56px auto 0;
     padding: 32px;
     background-color: var(--color-blanco);
-    border-left: 4px solid var(--color-coral);
-    border-radius: 6px;
+    border-left: 5px solid var(--color-coral);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
 }
 
 .funcion-verificacion h3 {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: var(--color-verde);
     margin-bottom: 12px;
 }
@@ -229,18 +253,24 @@ h1, h2, h3 {
     justify-content: center;
     flex-wrap: wrap;
     gap: 14px;
-    max-width: 800px;
+    max-width: 850px;
     margin: 0 auto;
 }
 
 .areas-item {
-    padding: 10px 20px;
-    border-radius: 20px;
+    padding: 12px 24px;
+    border-radius: 30px;
     background-color: var(--color-beige);
     color: var(--color-verde);
     font-size: 0.95rem;
     font-weight: 600;
     border: 1.5px solid var(--color-verde);
+    transition: all 0.2s ease;
+}
+.areas-item:hover {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    transform: scale(1.05);
 }
 
 /*----------------------------------------------------------------- footer*/
@@ -253,7 +283,7 @@ h1, h2, h3 {
 
 .footer-contenido .logo-texto {
     color: var(--color-blanco);
-    font-size: 1.3rem;
+    font-size: 1.4rem;
 }
 
 .footer-contenido p {
@@ -268,15 +298,44 @@ h1, h2, h3 {
 }
 
 .footer-contacto a {
-    color: var(--color-blanco);
+    color: var(--color-coral);
     font-weight: 600;
+    text-decoration: none;
+}
+.footer-contacto a:hover {
+    text-decoration: underline;
 }
 
 .footer-legal {
     font-size: 0.8rem;
-    opacity: 0.7;
-    max-width: 600px;
+    opacity: 0.75;
+    max-width: 650px;
     margin: 0 auto;
     padding-top: 24px;
-    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px 20px;
+    }
+
+    .botones-usuario {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .presentacion {
+        padding: 40px 20px;
+    }
+
+    .presentacion-titulo h1 {
+        font-size: 2rem;
+    }
+
+    .funcion-division {
+        grid-template-columns: 1fr;
+    }
 }
