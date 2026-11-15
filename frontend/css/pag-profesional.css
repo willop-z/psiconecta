@@ -452,3 +452,17 @@ h1, h2 {
     background-color: var(--color-verde);
     color: var(--color-blanco);
 }
+
+.cita-motivo summary {
+    cursor: pointer;
+    color: var(--color-verde);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.cita-motivo p {
+    margin-top: 8px;
+    max-width: 320px;
+    font-size: 0.85rem;
+    white-space: pre-line;
+}

@@ -210,7 +210,7 @@ function calcularEdad(fechaTexto) {
     }
 
 // -------------------------------------------------------------------------------------------------- ruta registro de consultantes
-    app.post("/api/registro/consultante", async function (req, res) {
+app.post("/api/registro/consultante", async function (req, res) {
     const { nombre, correo, contrasena, confirmarContrasena, fechaNacimiento } = req.body;
 
   // 1. valida que se llenen todos los espacios
@@ -452,6 +452,14 @@ app.get("/api/sesion", function (req, res) {
     res.json({ nombre, rol });
 });
 
+// Cerrar sesión
+app.post("/api/logout", function (req, res) {
+    req.session.destroy(function () {
+        res.clearCookie("connect.sid");
+        res.json({ mensaje: "Sesión cerrada" });
+    });
+});
+
 // --------------------------------------------------------------------------datos del profesional que tiene sesión iniciada
 app.get("/api/profesional/perfil", exigirRol("psicologo"), async function (req, res) {
     try {
@@ -572,14 +580,17 @@ app.get("/api/profesional/citas", exigirRol("psicologo"), async function (req, r
             return res.status(403).json({ mensaje: "Tu cuenta debe estar aprobada" });
         }
 
-        const [filas] = await conexion.execute(
+                const [filas] = await conexion.execute(
             `SELECT c.id, u.nombre AS consultante,
                     DATE_FORMAT(c.fecha_hora, '%d/%m/%Y') AS fecha,
                     DATE_FORMAT(c.fecha_hora, '%H:%i') AS hora,
-                    c.estado
+                    c.estado,
+                    f.motivo_consulta AS motivo
                 FROM CITA c
                 JOIN CONSULTANTE co ON co.id = c.consultante_id
                 JOIN USUARIO u ON u.id = co.usuario_id
+                LEFT JOIN FORMULARIO_ADMISION f
+                        ON f.consultante_id = c.consultante_id AND f.psicologo_id = c.psicologo_id
                 WHERE c.psicologo_id = ? AND c.fecha_hora >= CURDATE()
                 ORDER BY c.fecha_hora`,
             [psicologoId]
@@ -709,6 +720,14 @@ const PASO_CITAS = 90;         // cada cuántos minutos puede empezar una cita (
 const ESTADO_CITA_NUEVA = "confirmada"; // estado con el que nace una cita al agendarla
 const DIAS_ANTICIPACION = 30;  // hasta cuántos días adelante se puede agendar
 const NOMBRES_DIAS_SEMANA = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+// Una cita cuenta como "realizada" cuando ya terminó su horario y no está cancelada.
+// Se usa dentro de consultas que llaman "c" a la tabla CITA.
+const SQL_ESTADO_REAL = `CASE
+        WHEN c.estado = 'cancelada' THEN 'cancelada'
+        WHEN c.estado = 'realizada'
+            OR DATE_ADD(c.fecha_hora, INTERVAL c.duracion_minutos MINUTE) <= NOW() THEN 'realizada'
+        ELSE c.estado
+    END`;
 
 // Convierte "AAAA-MM-DD" en una fecha a las 00:00 (hora local); devuelve null si no es una fecha real
 function leerFecha(texto) {
@@ -938,6 +957,30 @@ app.post("/api/psicologos/:id/citas", exigirRol("consultante"), async function (
         res.status(500).json({ mensaje: "No se pudo agendar la cita" });
     } finally {
         cx.release();
+    }
+});
+
+// Historial del consultante: todas sus citas, de la más reciente a la más antigua
+app.get("/api/consultante/citas", exigirRol("consultante"), async function (req, res) {
+    try {
+        const [filas] = await conexion.execute(
+            `SELECT c.id, u.nombre AS psicologo,
+                    DATE_FORMAT(c.fecha_hora, '%d/%m/%Y') AS fecha,
+                    DATE_FORMAT(c.fecha_hora, '%H:%i') AS hora,
+                    ${SQL_ESTADO_REAL} AS estado,
+                    c.calificacion
+                FROM CITA c
+                JOIN CONSULTANTE co ON co.id = c.consultante_id
+                JOIN PSICOLOGO p ON p.id = c.psicologo_id
+                JOIN USUARIO u ON u.id = p.usuario_id
+                WHERE co.usuario_id = ?
+                ORDER BY c.fecha_hora DESC`,
+            [req.session.usuario.id]
+        );
+        res.json(filas);
+    } catch (error) {
+        console.log("Error al leer el historial:", error.message);
+        res.status(500).json({ mensaje: "No se pudo cargar el historial" });
     }
 });
 

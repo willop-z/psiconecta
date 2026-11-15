@@ -252,3 +252,30 @@ h1, h3 {
     background-color: #D4EDDA;
     color: #1E7A34;
 }
+
+.cita-estado {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.cita-estado.confirmada {
+    background-color: #D4EDDA;
+    color: #1E7A34;
+}
+
+.cita-estado.pendiente {
+    background-color: #FFF3CD;
+    color: #8A6D00;
+}
+
+.cita-estado.cancelada {
+    background-color: #F8D7DA;
+    color: #A32E3C;
+}
+
+.historial-vacio {
+    font-size: 0.95rem;
+    opacity: 0.7;
+}

@@ -13,3 +13,17 @@ async function mostrarNombreUsuario() {
 }
 
 mostrarNombreUsuario();
+
+const botonCerrarSesion = document.querySelector('.btn-cerrar-sesion');
+
+if (botonCerrarSesion) {
+    botonCerrarSesion.addEventListener('click', async function(evento) {
+        evento.preventDefault();
+        try {
+            await fetch('/api/logout', { method: 'POST' });
+        } catch (error) {
+            // si el servidor no responde, igual se sale de la página
+        }
+        window.location.href = 'index.html';
+    });
+}

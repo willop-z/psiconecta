@@ -35,6 +35,26 @@ async function cargarCitas() {
             celdaEstado.appendChild(etiqueta);
             fila.appendChild(celdaEstado);
 
+            // Motivo de consulta: un desplegable, o un guion si no hay formulario
+            const celdaMotivo = document.createElement('td');
+            if (cita.motivo) {
+                const detalle = document.createElement('details');
+                detalle.className = 'cita-motivo';
+
+                const resumen = document.createElement('summary');
+                resumen.textContent = 'Ver motivo';
+
+                const texto = document.createElement('p');
+                texto.textContent = cita.motivo;
+
+                detalle.appendChild(resumen);
+                detalle.appendChild(texto);
+                celdaMotivo.appendChild(detalle);
+            } else {
+                celdaMotivo.textContent = '—';
+            }
+            fila.appendChild(celdaMotivo);
+
             cuerpoCitas.appendChild(fila);
         });
     } catch (error) {

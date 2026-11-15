@@ -57,29 +57,21 @@
       <div id="tab-historial" class="tab-panel oculto">
         <h1>Mi historial de encuentros</h1>
 
-        <table class="historial-tabla">
+        <p id="historial-vacio" class="historial-vacio oculto">
+          Aún no tienes citas. Cuando agendes una, aparecerá aquí.
+        </p>
+
+        <table id="tabla-historial" class="historial-tabla oculto">
           <thead>
             <tr>
               <th>Psicólogo</th>
               <th>Fecha</th>
+              <th>Hora</th>
               <th>Estado</th>
               <th>Calificación</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Laura Ramírez</td>
-              <td>10/09/2026</td>
-              <td><span class="cita-estado realizada">Realizada</span></td>
-              <td>⭐⭐⭐⭐⭐</td>
-            </tr>
-            <tr>
-              <td>Andrés Torres</td>
-              <td>15/08/2026</td>
-              <td><span class="cita-estado realizada">Realizada</span></td>
-              <td>⭐⭐⭐⭐</td>
-            </tr>
-          </tbody>
+          <tbody id="historial-cuerpo"></tbody>
         </table>
       </div>
     </section>
@@ -87,5 +79,6 @@
     <script src="js/pag-consultante.js"></script>
     <script src="js/sesion.js"></script>
     <script src="js/busqueda.js"></script>
+    <script src="js/historial.js"></script>
   </body>
 </html>
