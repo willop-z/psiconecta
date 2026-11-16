@@ -984,6 +984,53 @@ app.get("/api/consultante/citas", exigirRol("consultante"), async function (req,
     }
 });
 
+// Calificar una cita ya realizada (el consultante, una sola vez)
+app.post("/api/consultante/citas/:id/calificacion", exigirRol("consultante"), async function (req, res) {
+    const id = leerId(req.params.id);
+    const calificacion = req.body.calificacion;
+    const comentario = typeof req.body.comentario === "string" ? req.body.comentario.trim() : "";
+
+    if (!id || !Number.isInteger(calificacion) || calificacion < 1 || calificacion > 5) {
+        return res.status(400).json({ mensaje: "La calificación debe ser un número entero entre 1 y 5" });
+    }
+    if (comentario.length > 500) {
+        return res.status(400).json({ mensaje: "El comentario puede tener máximo 500 caracteres" });
+    }
+
+    try {
+        // La cita debe ser de este consultante
+        const [filas] = await conexion.execute(
+            `SELECT ${SQL_ESTADO_REAL} AS estado, c.calificacion
+                FROM CITA c
+                JOIN CONSULTANTE co ON co.id = c.consultante_id
+                WHERE c.id = ? AND co.usuario_id = ?`,
+            [id, req.session.usuario.id]
+        );
+        if (filas.length === 0) {
+            return res.status(404).json({ mensaje: "No encontramos esa cita" });
+        }
+        if (filas[0].estado !== "realizada") {
+            return res.status(400).json({ mensaje: "Solo puedes calificar citas que ya se realizaron" });
+        }
+        if (filas[0].calificacion !== null) {
+            return res.status(409).json({ mensaje: "Esta cita ya fue calificada" });
+        }
+
+        // "calificacion IS NULL" evita que dos envíos simultáneos guarden dos veces
+        const [resultado] = await conexion.execute(
+            "UPDATE CITA SET calificacion = ?, comentario_calificacion = ? WHERE id = ? AND calificacion IS NULL",
+            [calificacion, comentario || null, id]
+        );
+        if (resultado.affectedRows === 0) {
+            return res.status(409).json({ mensaje: "Esta cita ya fue calificada" });
+        }
+        res.json({ mensaje: "¡Gracias por tu calificación!" });
+    } catch (error) {
+        console.log("Error al calificar la cita:", error.message);
+        res.status(500).json({ mensaje: "No se pudo guardar la calificación" });
+    }
+});
+
 // Convierte "08:30" en minutos desde medianoche (510)
 function aMinutos(hora) {
     const partes = hora.split(":").map(Number);

@@ -73,6 +73,37 @@
           </thead>
           <tbody id="historial-cuerpo"></tbody>
         </table>
+
+        <div id="panel-calificar" class="panel-calificar oculto">
+          <h3 id="calificar-titulo"></h3>
+
+          <div id="calificar-estrellas" class="calificar-estrellas"></div>
+
+          <label for="calificar-comentario">Comentario (opcional)</label>
+          <textarea
+            id="calificar-comentario"
+            rows="3"
+            maxlength="500"
+            placeholder="¿Cómo te fue en la sesión?"
+          ></textarea>
+
+          <div class="calificar-botones">
+            <button
+              type="button"
+              id="btn-enviar-calificacion"
+              class="btn-enviar-calificacion"
+            >
+              Enviar calificación
+            </button>
+            <button
+              type="button"
+              id="btn-cancelar-calificacion"
+              class="btn-cancelar-calificacion"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 

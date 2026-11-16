@@ -1,77 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Psiconecta — Psicólogo/Practicante</title>
-    <link rel="stylesheet" href="css/registro.css">
-</head>
-<body>
-<!--------------------------------------------------------------------registro de psicólogos y practicantes-->
-<header class="header-simple">
-    <a href="index.html" class="logo">
-        <span class="logo-texto">Psiconecta</span>
-    </a>
-</header>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Psiconecta — Psicólogo/Practicante</title>
+        <link rel="stylesheet" href="css/registro.css" />
+    </head>
+    <body>
+        <!--------------------------------------------------------------------registro de psicólogos y practicantes-->
+        <header class="header-simple">
+            <a href="index.html" class="logo">
+                <img src="/images/logo-titulo.jpg" alt="Logo" class="logo-imagen" />
+            </a>
+            <a href="index.html" class="btn-volver">← Volver</a>
+        </header>
 
-<section class="registro">
-    <div class="registro-formulario">
-        <h1>Crea tu cuenta como psicólogo o practicante</h1>
-        <p class="registro-subtitulo">Regístrate para ofrecer orientación psicológica de forma voluntaria.</p>
+        <section class="registro">
+            <div class="registro-formulario">
+                <h1>Crea tu cuenta como psicólogo o practicante</h1>
+                <p class="registro-subtitulo">Regístrate para ofrecer orientación psicológica de forma voluntaria.</p>
 
-        <form id="form-registro-profesional">
-            <div class="registro-campo">
-                <label for="nombre">Nombre completo</label> 
-                <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
+                <form id="form-registro-profesional">
+                    <div class="registro-campo">
+                        <label for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required />
+                    </div>
+
+                    <div class="registro-campo">
+                        <label for="correo">Correo electrónico</label>
+                        <input type="email" id="correo" name="correo" placeholder="Ingresa tu correo" required />
+                    </div>
+
+                    <div class="registro-campo">
+                        <label for="contrasena">Contraseña</label>
+                        <input type="password" id="contrasena" name="contrasena" placeholder="Crea una contraseña" required />
+                    </div>
+
+                    <div class="registro-campo">
+                        <label for="confirmar-contrasena">Confirmar contraseña</label>
+                        <input type="password" id="confirmar-contrasena" name="confirmar-contrasena" placeholder="Confirma tu contraseña" required />
+                    </div>
+
+                    <div class="registro-campo registro-tipo">
+                        <label>¿Cuál es tu situación actual?</label>
+
+                        <div class="registro-tipo-opcion">
+                            <input type="radio" id="tipo-profesional" name="tipo" value="profesional" required />
+                            <label for="tipo-profesional">Soy profesional graduado</label>
+                        </div>
+
+                        <div class="registro-tipo-opcion">
+                            <input type="radio" id="tipo-practicante" name="tipo" value="practicante" required />
+                            <label for="tipo-practicante">Soy practicante en formación</label>
+                        </div>
+                    </div>
+
+                    <div id="documentos-profesional" class="registro-documentos oculto">
+                        <label for="doc-tarjeta">Tarjeta profesional</label>
+                        <input type="file" id="doc-tarjeta" name="docTarjeta" />
+                    </div>
+
+                    <div id="documentos-practicante" class="registro-documentos oculto">
+                        <label for="doc-carta">Carta de la universidad</label>
+                        <input type="file" id="doc-carta" name="docCarta" />
+
+                        <label for="doc-aval">Aval de la universidad</label>
+                        <input type="file" id="doc-aval" name="docAval" />
+                    </div>
+
+                    <button type="submit" class="btn-registrar">Crear cuenta</button>
+                </form>
             </div>
-
-            <div class="registro-campo">
-                <label for="correo">Correo electrónico</label>
-                <input type="email" id="correo" name="correo" placeholder="Ingresa tu correo" required>
-            </div>
-
-            <div class="registro-campo">
-                <label for="contrasena">Contraseña</label>
-                <input type="password" id="contrasena" name="contrasena" placeholder="Crea una contraseña" required>
-            </div>
-
-            <div class="registro-campo">
-                <label for="confirmar-contrasena">Confirmar contraseña</label>
-                <input type="password" id="confirmar-contrasena" name="confirmar-contrasena" placeholder="Confirma tu contraseña" required>
-            </div>
-
-            <div class="registro-campo registro-tipo">
-                <label>¿Cuál es tu situación actual?</label>
-
-                <div class="registro-tipo-opcion">
-                    <input type="radio" id="tipo-profesional" name="tipo" value="profesional" required>
-                    <label for="tipo-profesional">Soy profesional graduado</label>
-                </div>
-
-                <div class="registro-tipo-opcion">
-                    <input type="radio" id="tipo-practicante" name="tipo" value="practicante" required>
-                    <label for="tipo-practicante">Soy practicante en formación</label>
-                </div>
-            </div>
-
-            <div id="documentos-profesional" class="registro-documentos oculto">
-                <label for="doc-tarjeta">Tarjeta profesional</label>
-                <input type="file" id="doc-tarjeta" name="docTarjeta">
-            </div>
-
-            <div id="documentos-practicante" class="registro-documentos oculto">
-                <label for="doc-carta">Carta de la universidad</label>
-                <input type="file" id="doc-carta" name="docCarta">
-
-                <label for="doc-aval">Aval de la universidad</label>
-                <input type="file" id="doc-aval" name="docAval">
-            </div>
-
-            <button type="submit" class="btn-registrar">Crear cuenta</button>
-        </form>
-    </div>
-</section>
-
-</body>
-<script src="js/profesional.js"></script>
+        </section>
+    </body>
+    <script src="js/profesional.js"></script>
 </html>

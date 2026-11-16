@@ -25,6 +25,7 @@ h1, h2, h3 {
 }
 
 /*----------------------------------------------------------------- header*/
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -35,6 +36,7 @@ h1, h2, h3 {
     position: sticky;
     top: 0;
     z-index: 100;
+    height: 150px;
 }
 
 .logo-texto {
@@ -42,6 +44,20 @@ h1, h2, h3 {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--color-verde);
+}
+
+/* Alineación del contenedor del logo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 2px; /* Espacio entre la imagen y el texto */
+}
+
+/* Control del tamaño de la imagen del logo */
+.logo-imagen {
+    height: 125px; /* Ajusta este valor si lo quieres más grande o pequeño */
+    width: auto;  /* Mantiene la proporción original sin deformar la imagen */
+    object-fit: contain;
 }
 
 .botones-usuario {
@@ -318,13 +334,19 @@ h1, h2, h3 {
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
+        height: auto;
         gap: 16px;
         padding: 16px 20px;
+    }
+
+    .logo {
+        gap: 8px; /* Ajusta el espacio entre la imagen y el texto */
     }
 
     .botones-usuario {
         flex-wrap: wrap;
         justify-content: center;
+        gap: 10px;
     }
 
     .presentacion {
