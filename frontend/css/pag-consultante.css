@@ -31,6 +31,19 @@ h1, h3 {
     color: var(--color-verde);
 }
 
+.logo {
+display: flex;
+align-items: center;
+gap: 2px;
+}
+
+/* Tamaño del logo */
+.logo-imagen {
+    height: 125px;
+    width: auto;
+    object-fit: contain;
+}
+
 /*-----------------------------------------------------------------------header*/
 .header-simple {
     display: flex;

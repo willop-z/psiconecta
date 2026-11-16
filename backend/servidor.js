@@ -602,6 +602,20 @@ app.get("/api/profesional/citas", exigirRol("psicologo"), async function (req, r
     }
 });
 
+// Calificaciones del psicólogo que tiene la sesión iniciada (las mismas que ven los consultantes)
+app.get("/api/profesional/calificaciones", exigirRol("psicologo"), async function (req, res) {
+    try {
+        const psicologoId = await obtenerPsicologoAprobado(req.session.usuario.id);
+        if (!psicologoId) {
+            return res.status(403).json({ mensaje: "Tu cuenta debe estar aprobada" });
+        }
+        res.json(await obtenerCalificaciones(psicologoId));
+    } catch (error) {
+        console.log("Error al leer las calificaciones:", error.message);
+        res.status(500).json({ mensaje: "No se pudieron cargar las calificaciones" });
+    }
+});
+
 // ---------------------------------------------------------------Búsqueda de psicólogos para el consultante (solo aprobados, con filtros opcionales)
 app.get("/api/psicologos", exigirRol("consultante"), async function (req, res) {
     const tipo = req.query.tipo || "";

@@ -61,6 +61,19 @@ h1, h2 {
     font-weight: 600;
 }
 
+.logo {
+display: flex;
+align-items: center;
+gap: 2px;
+}
+
+/* Tamaño del logo */
+.logo-imagen {
+    height: 125px;
+    width: auto;
+    object-fit: contain;
+}
+
 .psicologo {
     padding: 48px 40px;
 }
@@ -465,4 +478,53 @@ h1, h2 {
     max-width: 320px;
     font-size: 0.85rem;
     white-space: pre-line;
+}
+
+
+/*------------------------------------------------------calificaciones recibidas */
+.psicologo-calificaciones {
+    background-color: var(--color-blanco);
+    padding: 28px;
+    border-radius: 10px;
+    margin-top: 24px;
+}
+
+.psicologo-calificaciones h2 {
+    font-size: 1.2rem;
+    color: var(--color-verde);
+    margin-bottom: 8px;
+}
+
+.calificaciones-resumen {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-verde);
+    margin-bottom: 12px;
+}
+
+.calificaciones-comentarios {
+    list-style: none;
+}
+
+.calificaciones-comentarios li {
+    padding: 12px 0;
+    border-top: 1px solid #eee;
+}
+
+.comentario-encabezado {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-coral);
+    margin-bottom: 4px;
+}
+
+.calificaciones-comentarios p {
+    font-size: 0.9rem;
+    white-space: pre-line;
+}
+
+.calificaciones-nota {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-top: 12px;
 }
