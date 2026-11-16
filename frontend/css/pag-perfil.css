@@ -329,3 +329,45 @@ h1, h2 {
 .btn-cancelar-reserva:hover {
     background-color: #eee;
 }
+
+/* ===== Calificaciones ===== */
+.perfil-calificaciones {
+    background-color: var(--color-blanco);
+    padding: 28px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+}
+
+.perfil-calificaciones h2 {
+    font-size: 1.2rem;
+    color: var(--color-verde);
+    margin-bottom: 8px;
+}
+
+.perfil-resumen-calificaciones {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-verde);
+    margin-bottom: 12px;
+}
+
+.perfil-comentarios {
+    list-style: none;
+}
+
+.perfil-comentarios li {
+    padding: 12px 0;
+    border-top: 1px solid #eee;
+}
+
+.comentario-encabezado {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-coral);
+    margin-bottom: 4px;
+}
+
+.perfil-comentarios p {
+    font-size: 0.9rem;
+    white-space: pre-line;
+}

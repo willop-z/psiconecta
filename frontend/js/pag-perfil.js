@@ -88,6 +88,8 @@ async function cargarPerfil() {
             listaHorarios.appendChild(item);
         });
 
+        mostrarCalificaciones(perfil.calificaciones);
+
         contenidoPerfil.classList.remove('oculto');
     } catch (error) {
         console.error('No se pudo cargar el perfil:', error);
@@ -228,5 +230,36 @@ async function reservarHorario() {
 
 botonConfirmar.addEventListener('click', reservarHorario);
 botonCancelarReserva.addEventListener('click', ocultarConfirmacion);
+
+// ---------------------------------------------------------------------------- Calificaciones
+const resumenCalificaciones = document.getElementById('perfil-resumen-calificaciones');
+const listaComentarios = document.getElementById('perfil-comentarios');
+
+function mostrarCalificaciones(calificaciones) {
+    if (calificaciones.total === 0) {
+        resumenCalificaciones.textContent = 'Aún sin calificaciones.';
+        return;
+    }
+
+    const promedio = String(calificaciones.promedio).replace('.', ',');
+    resumenCalificaciones.textContent = '★ ' + promedio + ' de 5 · ' + calificaciones.total +
+        (calificaciones.total === 1 ? ' calificación' : ' calificaciones');
+
+    calificaciones.comentarios.forEach(function(comentario) {
+        const item = document.createElement('li');
+
+        const encabezado = document.createElement('span');
+        encabezado.className = 'comentario-encabezado';
+        encabezado.textContent = '★'.repeat(comentario.calificacion) +
+            '☆'.repeat(5 - comentario.calificacion) + ' · ' + comentario.mes;
+
+        const texto = document.createElement('p');
+        texto.textContent = comentario.comentario;
+
+        item.appendChild(encabezado);
+        item.appendChild(texto);
+        listaComentarios.appendChild(item);
+    });
+}
 
 cargarPerfil();

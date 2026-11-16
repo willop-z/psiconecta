@@ -51,6 +51,9 @@ gap: 2px;
     justify-content: space-between;
     align-items: center;
     height: 150px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
     padding: 0 40px;
     background-color: var(--color-blanco);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -198,6 +201,48 @@ font-size: 0.9rem;
 
 .registro-documentos input[type="file"]:last-child {
 margin-bottom: 0;
+}
+
+/*----------------------------------------------------------------- footer*/
+.footer {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    padding: 48px 40px 24px;
+    text-align: center;
+}
+
+.footer-contenido .logo-texto {
+    color: var(--color-blanco);
+    font-size: 1.4rem;
+}
+
+.footer-contenido p {
+    font-size: 0.9rem;
+    margin-top: 8px;
+    opacity: 0.85;
+}
+
+.footer-contacto {
+    margin: 24px 0;
+    font-size: 0.9rem;
+}
+
+.footer-contacto a {
+    color: var(--color-coral);
+    font-weight: 600;
+    text-decoration: none;
+}
+.footer-contacto a:hover {
+    text-decoration: underline;
+}
+
+.footer-legal {
+    font-size: 0.8rem;
+    opacity: 0.75;
+    max-width: 650px;
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* ===== Utilidad: ocultar elementos ===== */

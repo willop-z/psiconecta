@@ -396,3 +396,16 @@ h1, h3 {
 .btn-cancelar-calificacion:hover {
     background-color: #eee;
 }
+
+.calificar-aviso {
+    font-size: 0.8rem;
+    opacity: 0.85;
+    margin-bottom: 8px;
+}
+
+.psicologo-calificacion {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-verde);
+    margin-bottom: 12px;
+}

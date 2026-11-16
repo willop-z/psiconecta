@@ -26,6 +26,13 @@ async function cargarAreas() {
     }
 }
 
+// "★ 4,5 (12 calificaciones)" o "Aún sin calificaciones"
+function textoValoracion(promedio, total) {
+    if (total === 0 || promedio === null) return 'Aún sin calificaciones';
+    return '★ ' + String(promedio).replace('.', ',') + ' (' + total +
+        (total === 1 ? ' calificación)' : ' calificaciones)');
+}
+
 // Arma la tarjeta de un psicólogo
 function crearTarjeta(psicologo) {
     const tarjeta = document.createElement('div');
@@ -37,6 +44,10 @@ function crearTarjeta(psicologo) {
     const tipo = document.createElement('span');
     tipo.className = 'psicologo-tipo';
     tipo.textContent = TEXTOS_TIPO[psicologo.tipo];
+
+    const valoracion = document.createElement('span');
+    valoracion.className = 'psicologo-calificacion';
+    valoracion.textContent = textoValoracion(psicologo.promedio, psicologo.total);
 
     const areas = document.createElement('div');
     areas.className = 'psicologo-areas';
@@ -54,6 +65,7 @@ function crearTarjeta(psicologo) {
 
     tarjeta.appendChild(nombre);
     tarjeta.appendChild(tipo);
+    tarjeta.appendChild(valoracion);
     tarjeta.appendChild(areas);
     tarjeta.appendChild(enlace);
     return tarjeta;

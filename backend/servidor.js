@@ -630,8 +630,10 @@ app.get("/api/psicologos", exigirRol("consultante"), async function (req, res) {
     try {
         const [filas] = await conexion.execute(
             `SELECT p.id, u.nombre, p.tipo,
-                    GROUP_CONCAT(a.nombre ORDER BY a.nombre SEPARATOR '||') AS areas
-                FROM PSICOLOGO p
+                    GROUP_CONCAT(a.nombre ORDER BY a.nombre SEPARATOR '||') AS areas,
+                    (SELECT COUNT(calificacion) FROM CITA WHERE psicologo_id = p.id) AS totalCalificaciones,
+                    (SELECT AVG(calificacion) FROM CITA WHERE psicologo_id = p.id) AS promedio
+            FROM PSICOLOGO p
                 JOIN USUARIO u ON u.id = p.usuario_id
                 LEFT JOIN PSICOLOGO_AREA_INTERES pa ON pa.psicologo_id = p.id
                 LEFT JOIN AREA_INTERES a ON a.id = pa.area_interes_id
@@ -646,7 +648,9 @@ app.get("/api/psicologos", exigirRol("consultante"), async function (req, res) {
                 id: fila.id,
                 nombre: fila.nombre,
                 tipo: fila.tipo,
-                areas: fila.areas ? fila.areas.split("||") : []
+                areas: fila.areas ? fila.areas.split("||") : [],
+                total: Number(fila.totalCalificaciones),
+                promedio: fila.promedio === null ? null : Math.round(Number(fila.promedio) * 10) / 10
             };
         }));
     } catch (error) {
@@ -654,6 +658,28 @@ app.get("/api/psicologos", exigirRol("consultante"), async function (req, res) {
         res.status(500).json({ mensaje: "No se pudo realizar la búsqueda" });
     }
 });
+
+// Promedio, cantidad y comentarios (sin nombres) de las calificaciones de un psicólogo
+async function obtenerCalificaciones(psicologoId) {
+    const [resumen] = await conexion.execute(
+        "SELECT COUNT(calificacion) AS total, AVG(calificacion) AS promedio FROM CITA WHERE psicologo_id = ?",
+        [psicologoId]
+    );
+    const [comentarios] = await conexion.execute(
+        `SELECT calificacion, comentario_calificacion AS comentario,
+                DATE_FORMAT(fecha_hora, '%m/%Y') AS mes
+            FROM CITA
+            WHERE psicologo_id = ? AND calificacion IS NOT NULL AND comentario_calificacion IS NOT NULL
+            ORDER BY fecha_hora DESC
+            LIMIT 20`,
+        [psicologoId]
+    );
+    return {
+        total: Number(resumen[0].total),
+        promedio: resumen[0].promedio === null ? null : Math.round(Number(resumen[0].promedio) * 10) / 10,
+        comentarios: comentarios
+    };
+}
 
 // --------------------------------------------------------------- Perfil de un psicólogo aprobado, para que lo vea el consultante
 app.get("/api/psicologos/:id", exigirRol("consultante"), async function (req, res) {
@@ -702,16 +728,20 @@ app.get("/api/psicologos/:id", exigirRol("consultante"), async function (req, re
             [req.session.usuario.id, id]
         );
 
+        const calificaciones = await obtenerCalificaciones(id);
+
         res.json({
             ...filas[0],
             areas: areas.map(function (fila) { return fila.nombre; }),
             horarios: horarios,
-            requiereAdmision: admision.length === 0
+            requiereAdmision: admision.length === 0,
+            calificaciones: calificaciones
         });
-    } catch (error) {
+
+    }   catch (error) {
         console.log("Error al leer el perfil del psicólogo:", error.message);
         res.status(500).json({ mensaje: "No se pudo cargar el perfil" });
-    }
+        } 
 });
 
 // --------------------------------------------------------------------------------- AGENDAMIENTO DE CITAS
