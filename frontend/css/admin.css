@@ -19,6 +19,9 @@ body {
     color: var(--color-texto);
     background-color: var(--color-beige);
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 h1 {
@@ -31,6 +34,18 @@ h1 {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--color-verde);
+}
+.logo {
+display: flex;
+align-items: center;
+gap: 2px;
+}
+
+/* Tamaño del logo */
+.logo-imagen {
+    height: 125px;
+    width: auto;
+    object-fit: contain;
 }
 
 /* ===== Header ===== */
@@ -56,6 +71,7 @@ h1 {
 /* ===== Sección admin ===== */
 .admin {
     padding: 48px 40px;
+    flex: 1;
 }
 
 .admin h1 {
@@ -154,4 +170,69 @@ h1 {
 .btn-aprobar:hover,
 .btn-rechazar:hover {
     opacity: 0.8;
+}
+
+/*----------------------------------------------------------------- footer*/
+.footer {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    padding: 48px 40px 24px;
+    text-align: center;
+}
+
+.footer-contenido .logo-texto {
+    color: var(--color-blanco);
+    font-size: 1.4rem;
+}
+
+.footer-contenido p {
+    font-size: 0.9rem;
+    margin-top: 8px;
+    opacity: 0.85;
+}
+
+.footer-contacto {
+    margin: 24px 0;
+    font-size: 0.9rem;
+}
+
+.footer-contacto a {
+    color: var(--color-coral);
+    font-weight: 600;
+    text-decoration: none;
+}
+.footer-contacto a:hover {
+    text-decoration: underline;
+}
+
+/* ------------------------------------------------------------ responsive*/
+@media (max-width: 768px) {
+    .header-simple {
+        padding: 12px 20px;
+    }
+
+    .logo-imagen {
+        height: 85px; /* Un poco más compacto en celular */
+    }
+
+    .admin {
+        padding: 32px 20px;
+    }
+
+    .admin h1 {
+        font-size: 1.45rem;
+    }
+
+    /* Permite deslizar la tabla hacia los lados en pantallas pequeñas sin romper la página */
+    .admin-tabla {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .btn-aprobar,
+    .btn-rechazar {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
 }

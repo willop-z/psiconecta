@@ -153,8 +153,8 @@ app.use(function (req, res, next) {
 });
 
 // TEMPORAL: publica los documentos subidos para que el administrador pueda verlos.
-// Quien tenga el enlace puede abrirlos; se reemplaza por una ruta protegida cuando existan las sesiones.
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// Documentos subidos: solo el administrador puede abrirlos
+app.use("/uploads", exigirRol("admin"), express.static(path.join(__dirname, "uploads")));
 
 // Entrega las páginas de la carpeta frontend (una carpeta arriba de backend)
 app.use(express.static(path.join(__dirname, "../frontend")));
@@ -1255,7 +1255,7 @@ app.delete("/api/profesional/disponibilidad/:id", exigirRol("psicologo"), async 
 // PROVISIONAL: estas rutas todavía no verifican quién las llama; se protegen cuando existan las sesiones.
 
 // 1. trae los documentos pendientes de revisión subidos por el prfesional
-app.get("/api/admin/documentos-pendientes", async function (req, res) {
+app.get("/api/admin/documentos-pendientes", exigirRol("admin"), async function (req, res) {
     try {
         const query = `
             SELECT 
@@ -1281,7 +1281,7 @@ app.get("/api/admin/documentos-pendientes", async function (req, res) {
 });
 
 // 2. aprobar los documentos y aprobar al profesional
-app.put("/api/admin/documentos/:id/aprobar", async function (req, res) {
+app.put("/api/admin/documentos/:id/aprobar", exigirRol("admin"), async function (req, res) {
     const documentoId = req.params.id;
     const cx = await conexion.getConnection();
 
@@ -1331,7 +1331,7 @@ app.put("/api/admin/documentos/:id/aprobar", async function (req, res) {
 });
 
 // 3. rechazar los docuementos y rechazar al profesional
-app.put("/api/admin/documentos/:id/rechazar", async function (req, res) {
+app.put("/api/admin/documentos/:id/rechazar", exigirRol("admin"), async function (req, res) {
     const documentoId = req.params.id;
     const cx = await conexion.getConnection();
 

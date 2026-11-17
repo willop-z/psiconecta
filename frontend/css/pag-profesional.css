@@ -17,6 +17,9 @@ body {
     color: var(--color-texto);
     background-color: var(--color-beige);
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 h1, h2 {
@@ -29,6 +32,16 @@ h1, h2 {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--color-verde);
+}
+
+.psicologo-panel {
+    flex: 1;
+}
+
+.header-usuario {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 /*---------------------------------------------------------------------- header*/
@@ -185,14 +198,6 @@ gap: 2px;
 }
 
 /* ------------------------------------------------------------------ editar y eliminar ventanas */
-.disponibilidad-lista li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
 .disponibilidad-acciones {
     display: flex;
     gap: 8px;
@@ -323,6 +328,11 @@ gap: 2px;
 }
 
 .disponibilidad-lista li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
     padding: 10px 0;
     border-bottom: 1px solid #eee;
     font-size: 0.95rem;
@@ -330,23 +340,6 @@ gap: 2px;
 
 .disponibilidad-lista li:last-child {
     border-bottom: none;
-}
-
-.btn-editar-disponibilidad {
-    border: 1.5px solid var(--color-verde);
-    background-color: transparent;
-    color: var(--color-verde);
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.btn-editar-disponibilidad:hover {
-    background-color: var(--color-verde);
-    color: var(--color-blanco);
 }
 
 /*---------------------------------------------------------------------- tabla citas*/
@@ -376,7 +369,7 @@ gap: 2px;
 }
 
 .citas-tabla thead {
-    background-color: var(--color-beige);
+    background-color: var(--color-blanco);
 }
 
 .citas-tabla tbody tr {
@@ -409,19 +402,14 @@ gap: 2px;
     color: #A32E3C;
 }
 
-.citas-vacia {
-    font-size: 0.9rem;
-    opacity: 0.7;
-}
-
 .cita-estado.realizada {
     background-color: #D4EDDA;
     color: #1E7A34;
 }
 
-.cita-estado.cancelada {
-    background-color: #F8D7DA;
-    color: #A32E3C;
+.citas-vacia {
+    font-size: 0.9rem;
+    opacity: 0.7;
 }
 
 /* ------------------------------------------------------- áreas de interées*/
@@ -527,4 +515,94 @@ gap: 2px;
     font-size: 0.8rem;
     opacity: 0.7;
     margin-top: 12px;
+}
+
+/*----------------------------------------------------------------- footer*/
+.footer {
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    padding: 48px 40px 24px;
+    text-align: center;
+}
+
+.footer-contenido .logo-texto {
+    color: var(--color-blanco);
+    font-size: 1.4rem;
+}
+
+.footer-contenido p {
+    font-size: 0.9rem;
+    margin-top: 8px;
+    opacity: 0.85;
+}
+
+.footer-contacto {
+    margin: 24px 0;
+    font-size: 0.9rem;
+}
+
+.footer-contacto a {
+    color: var(--color-coral);
+    font-weight: 600;
+    text-decoration: none;
+}
+.footer-contacto a:hover {
+    text-decoration: underline;
+}
+
+/* -------------------------------------------------- responsive */
+@media (max-width: 768px) {
+    .header-simple {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px 20px;
+    }
+
+    .logo-imagen {
+        height: 85px;
+    }
+
+    .header-usuario {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .psicologo {
+        padding: 32px 20px;
+    }
+
+    .psicologo h1 {
+        font-size: 1.45rem;
+        display: block;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .psicologo-perfil,
+    .psicologo-disponibilidad,
+    .psicologo-citas,
+    .psicologo-calificaciones,
+    .psicologo-aviso {
+        padding: 20px 16px;
+    }
+
+    /* Formulario de disponibilidad apilado en celular */
+    .disponibilidad-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-agregar-ventana,
+    .btn-cancelar-ventana,
+    .btn-guardar-perfil {
+        width: 100%;
+    }
+
+    /* Tabla de citas deslizable lateralmente sin romper la pantalla */
+    .citas-tabla {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
 }
